@@ -1,0 +1,6 @@
+migrations/
+
+bin/
+.git/
+Dockerfile
+README.md
