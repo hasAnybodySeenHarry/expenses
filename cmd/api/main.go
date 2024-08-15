@@ -38,5 +38,4 @@ func main() {
 	if err != nil {
 		app.logger.Fatalln(err)
 	}
-
 }
