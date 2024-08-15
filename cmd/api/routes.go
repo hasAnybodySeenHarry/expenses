@@ -17,5 +17,8 @@ func (app *application) routes() http.Handler {
 	// users
 	router.HandlerFunc(http.MethodPost, "/v1/users", app.registerHandler)
 
+	// transactions
+	router.HandlerFunc(http.MethodPost, "/v1/transactions", app.mustAuth(app.createTransactionHandler))
+
 	return router
 }

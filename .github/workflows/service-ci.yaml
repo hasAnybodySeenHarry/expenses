@@ -13,6 +13,7 @@ on:
 
 env:
   GO_VERSION: '1.20'
+  HELM_VERSION: 'v3.13.3'
 
 jobs:
   unit-tests:
@@ -52,6 +53,21 @@ jobs:
     - name: Run linter
       run: |
         ./bin/golangci-lint run
+
+  validate-helm:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Helm
+      uses: azure/setup-helm@v3
+      with:
+        version: ${{ env.HELM_VERSION }}
+
+    - name: Lint Helm Chart
+      run: |
+        helm lint ./app
 
   containerize:
     runs-on: ubuntu-latest

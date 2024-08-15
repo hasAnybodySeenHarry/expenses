@@ -41,3 +41,8 @@ func (app *application) badRequest(w http.ResponseWriter, r *http.Request, err e
 func (app *application) failedValidation(w http.ResponseWriter, r *http.Request, errors map[string]string) {
 	app.error(w, r, http.StatusUnprocessableEntity, errors)
 }
+
+func (app *application) invalidAuthToken(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("WWW-Authenticate", "Bearer")
+	app.error(w, r, http.StatusUnauthorized, "invalid or missing authentication header")
+}

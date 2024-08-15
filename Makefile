@@ -30,7 +30,7 @@ lint:
 	@echo "Running static analysis with golangci-lint..."
 	$(LINTER) run
 
-push:
+push: check-branch
 	@echo "Pushing source code to GitHub..."
 	git add $(COMMIT_DIR)
 	git commit -m $(COMMIT_MSG)
