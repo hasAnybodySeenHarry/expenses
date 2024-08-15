@@ -10,6 +10,8 @@ RUN go mod download
 
 COPY . .
 
+RUN go build -o /bin/app ./cmd/api
+
 FROM alpine:latest
 
 WORKDIR /app
