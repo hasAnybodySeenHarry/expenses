@@ -42,18 +42,24 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
-              port: http
+              path: {{ .Values.livenessProbe.path | default "/" }}
+              port: {{ .Values.livenessProbe.port | default "http" }}
           readinessProbe:
             httpGet:
-              path: /
-              port: http
+              path: {{ .Values.readinessProbe.path | default "/" }}
+              port: {{ .Values.readinessProbe.port | default "http" }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.startupProbe.path | default "/" }}
+              port: {{ .Values.startupProbe.port | default "http" }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          env:
+            {{- toYaml .Values.env | nindent 12 }}
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}

@@ -11,11 +11,15 @@ var (
 )
 
 type Models struct {
-	Users UserModel
+	Users        UserModel
+	Debts        DebtModel
+	Transactions TransactionModel
 }
 
 func New(db *sql.DB) Models {
 	return Models{
-		Users: UserModel{db: db},
+		Users:        UserModel{db: db},
+		Debts:        DebtModel{db: db},
+		Transactions: TransactionModel{db: db},
 	}
 }

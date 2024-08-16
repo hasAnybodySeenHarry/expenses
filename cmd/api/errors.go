@@ -46,3 +46,7 @@ func (app *application) invalidAuthToken(w http.ResponseWriter, r *http.Request)
 	w.Header().Set("WWW-Authenticate", "Bearer")
 	app.error(w, r, http.StatusUnauthorized, "invalid or missing authentication header")
 }
+
+func (app *application) forbidden(w http.ResponseWriter, r *http.Request) {
+	app.error(w, r, http.StatusForbidden, http.StatusText(http.StatusForbidden))
+}
