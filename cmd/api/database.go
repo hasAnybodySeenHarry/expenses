@@ -3,12 +3,14 @@ package main
 import (
 	"context"
 	"database/sql"
+	"log"
 	"time"
 
 	_ "github.com/lib/pq"
 )
 
 func openDB(cfg *db) (*sql.DB, error) {
+	log.Println("DSN", cfg.dsn)
 	db, err := sql.Open("postgres", cfg.dsn)
 	if err != nil {
 		return nil, err

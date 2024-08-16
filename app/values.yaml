@@ -4,7 +4,7 @@ service:
   internalPort: 4000
 
 db:
-  dsn: cG9zdGdyZXM6Ly9oYXJyeTpwYXNzd29yZEBsb2NhbGhvc3Q6NTQzMi9leHBlbnNlcz9zc2xtb2RlPWRpc2FibGU=
+  dsn: cG9zdGdyZXM6Ly9oYXJyeTpwYXNzd29yZEBob3N0LmRvY2tlci5pbnRlcm5hbDo1NDMyL2V4cGVuc2VzP3NzbG1vZGU9ZGlzYWJsZQ==
   maxOpenConn: MzA=
   maxIdleConn: MzA=
 
@@ -45,7 +45,7 @@ securityContext:
   privileged: false
   readOnlyRootFilesystem: false
   runAsGroup: 1001
-  runAsNoRoot: true
+  runAsNonRoot: true
   runAsUser: 1001
 
 resources: {}
