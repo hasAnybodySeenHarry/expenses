@@ -14,7 +14,7 @@ image:
   registry: docker.io
   repository: "demona9458/expenses"
   tag: "latest"
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 imagePullSecrets: []
 nameOverride: ""
