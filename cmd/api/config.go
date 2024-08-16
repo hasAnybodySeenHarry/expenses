@@ -15,10 +15,16 @@ type db struct {
 }
 
 func loadConfig(cfg *config) {
+	// public.ecr.aws/docker/library/postgres:latest
+	// postgres:alpine
+	// postgres:latest
+
+	// docker run --name my-postgres -d -p 5432:5432 -e POSTGRES_USER=harry -e POSTGRES_PASSWORD=password -e POSTGRES_DB=expenses
+
 	flag.IntVar(&cfg.port, "port", 4000, "The port that the server listens at")
 	flag.StringVar(&cfg.env, "env", "development", "The environment of the server")
 
-	flag.StringVar(&cfg.db.dsn, "dsn", "postgres://harry:password@localhost/expenses?sslmode=disable", "The datasource to connect to postgres")
+	flag.StringVar(&cfg.db.dsn, "dsn", "postgres://harry:password@localhost:5432/expenses?sslmode=disable", "The datasource to connect to postgres")
 	flag.IntVar(&cfg.db.maxOpenConn, "max-open-conn", 30, "The maximum number of opened connections")
 	flag.IntVar(&cfg.db.maxIdleConn, "max-idle-conn", 30, "The maximum number of idle connections")
 
