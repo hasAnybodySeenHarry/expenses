@@ -9,4 +9,4 @@ require (
 	golang.org/x/crypto v0.25.0
 )
 
-require github.com/streadway/amqp v1.1.0 // indirect
+require github.com/streadway/amqp v1.1.0
