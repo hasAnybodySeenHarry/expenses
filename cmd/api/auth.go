@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"net/http"
+	"time"
 
 	"harry2an.com/expenses/internal/data"
 	"harry2an.com/expenses/internal/validator"
@@ -50,15 +51,14 @@ func (app *application) loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// to be continued
-	// token, err := app.models.Tokens.New(user.ID, data.ScopeAuthentication, 24*time.Hour)
-	// if err != nil {
-	// 	app.serverError(w, r, err)
-	// 	return
-	// }
+	token, err := app.models.Tokens.New(user.ID, data.ScopeAuthentication, 24*time.Hour)
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
 
-	// err = app.writeJSON(w, http.StatusOK, envelope{"token": token, "user": user}, nil)
-	// if err != nil {
-	// 	app.serverError(w, r, err)
-	// }
+	err = app.writeJSON(w, http.StatusOK, envelope{"token": token, "user": user}, nil)
+	if err != nil {
+		app.serverError(w, r, err)
+	}
 }
