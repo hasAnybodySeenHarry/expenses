@@ -69,3 +69,100 @@ func (m DebtModel) GetByID(debtID int64) (*Debt, error) {
 
 	return &d, nil
 }
+
+func (m DebtModel) GetForUserByCategories(userID int64) ([]*Debt, error) {
+	stmt := `
+		SELECT 
+			debts.id, debts.category, debts.total_amount, debts.created_at, debts.version,
+			lender.id AS lender_id, lender.name AS lender_name,
+			borrower.id AS borrower_id, borrower.name AS borrower_name
+		FROM debts
+		INNER JOIN users lender ON debts.lender_id = lender.id
+		INNER JOIN users borrower ON debts.borrower_id = borrower.id
+		WHERE debts.borrower.id = $1
+		ORDER BY debts.id DESC;
+	`
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.db.QueryContext(ctx, stmt, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	debts := make([]*Debt, 0)
+
+	for rows.Next() {
+		var debt Debt
+
+		err := rows.Scan(
+			&debt.ID, &debt.Category, &debt.Total, &debt.CreatedAt, &debt.Version,
+			&debt.Lender.ID, &debt.Lender.Name,
+			&debt.Borrower.ID, &debt.Borrower.Name,
+		)
+		if err != nil {
+			return nil, err
+		}
+		debts = append(debts, &debt)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	return debts, nil
+}
+
+func (m DebtModel) Insert(debt *Debt) error {
+	stmt := `
+		INSERT INTO debts (lender_id, borrower_id, category, total_amount)
+		VALUES ($1, $2, $3, $4)
+		RETURNING id, created_at, version
+	`
+
+	args := []interface{}{debt.Lender.ID, debt.Borrower.ID, debt.Category, debt.Total}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	err := m.db.QueryRowContext(ctx, stmt, args...).Scan(&debt.ID, &debt.CreatedAt, &debt.Version)
+	if err != nil {
+		switch {
+		case err.Error() == `pq: duplicate key value violates unique constraint "debts_category_key"`:
+			return ErrDuplicateCategory
+		case err.Error() == `pq: insert or update on table "debts" violates foreign key constraint "debts_lender_id_fkey"`:
+			return ErrUserForeignKey
+		default:
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m DebtModel) DeleteByID(debtID int64, version uuid.UUID) error {
+	stmt := `
+		DELETE FROM debts
+		WHERE id = $1 AND version = $2
+	`
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	result, err := m.db.ExecContext(ctx, stmt, debtID, version)
+	if err != nil {
+		return err
+	}
+
+	n, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if n != 1 {
+		return ErrWriteConflict
+	}
+
+	return nil
+}

@@ -141,3 +141,35 @@ func (m UserModel) GetForToken(token string, scope string) (*User, error) {
 
 	return &user, nil
 }
+
+func (m UserModel) GetByEmail(email string) (*User, error) {
+	stmt := `
+		SELECT id, name, email, activated, created_at, password, version
+		FROM users
+		WHERE email = $1
+	`
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var user User
+	err := m.db.QueryRowContext(ctx, stmt, email).Scan(
+		&user.ID,
+		&user.Name,
+		&user.Email,
+		&user.Activated,
+		&user.CreatedAt,
+		&user.Password.hash,
+		&user.Version,
+	)
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return nil, ErrNoRecord
+		default:
+			return nil, err
+		}
+	}
+
+	return &user, nil
+}

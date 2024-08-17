@@ -50,3 +50,11 @@ func (app *application) invalidAuthToken(w http.ResponseWriter, r *http.Request)
 func (app *application) forbidden(w http.ResponseWriter, r *http.Request) {
 	app.error(w, r, http.StatusForbidden, http.StatusText(http.StatusForbidden))
 }
+
+func (app *application) conflict(w http.ResponseWriter, r *http.Request) {
+	app.error(w, r, http.StatusConflict, http.StatusText(http.StatusConflict))
+}
+
+func (app *application) invalidCredentials(w http.ResponseWriter, r *http.Request) {
+	app.error(w, r, http.StatusUnauthorized, "invalid credentials")
+}
