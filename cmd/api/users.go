@@ -2,7 +2,9 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
+	"time"
 
 	"harry2an.com/expenses/internal/data"
 	"harry2an.com/expenses/internal/validator"
@@ -54,6 +56,19 @@ func (app *application) registerHandler(w http.ResponseWriter, r *http.Request) 
 		}
 		return
 	}
+
+	token, err := app.models.Tokens.New(user.ID, data.ScopeActivation, 15*time.Minute)
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	app.background(func() {
+		err := app.mailer.Send("user-welcome", user.Name, user.Email, token.Plaintext)
+		if err != nil {
+			app.logger.Println(fmt.Errorf("%s", err))
+		}
+	})
 
 	err = app.writeJSON(w, http.StatusCreated, envelope{
 		"user": user,
