@@ -4,7 +4,7 @@ service:
   internalPort: 4000
 
 db:
-  dsn: cG9zdGdyZXM6Ly9oYXJyeTpwYXNzd29yZEBob3N0LmRvY2tlci5pbnRlcm5hbDo1NDMyL2V4cGVuc2VzP3NzbG1vZGU9ZGlzYWJsZQ==
+  dsn: cG9zdGdyZXM6Ly9oYXJyeTpwYXNzd29yZEBteS1wb3N0Z3Jlcy1zZXJ2aWNlOjU0MzIvZXhwZW5zZXM/c3NsbW9kZT1kaXNhYmxl
   maxOpenConn: MzA=
   maxIdleConn: MzA=
 
