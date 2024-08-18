@@ -4,9 +4,12 @@ service:
   internalPort: 4000
 
 db:
-  dsn: cG9zdGdyZXM6Ly9oYXJyeTpwYXNzd29yZEBteS1wb3N0Z3Jlcy1zZXJ2aWNlOjU0MzIvZXhwZW5zZXM/c3NsbW9kZT1kaXNhYmxl
-  maxOpenConn: MzA=
-  maxIdleConn: MzA=
+  dsn: postgres://harry:password@postgres-database:5432/expenses?sslmode=disable
+  maxOpenConn: 30
+  maxIdleConn: 30
+
+rabbitmq:
+  uri: amqp://harry:password@rabbitmq:5672/
 
 replicaCount: 1
 
@@ -78,18 +81,23 @@ podDisruptionBudget:
   maxUnavailable: ""
 
 env:
-- name: dsn
+- name: DSN
   valueFrom:
     secretKeyRef:
       name: db-secrets
       key: dsn
-- name: max-open-conn
+- name: MAX-OPEN-CONN
   valueFrom:
     secretKeyRef:
       name: db-secrets
       key: maxOpenConn
-- name: max-idle-conn
+- name: MAX-IDLE-CONN
   valueFrom:
     secretKeyRef:
       name: db-secrets
       key: maxIdleConn
+- name: AMQP_URI
+  valueFrom:
+    secretKeyRef:
+      name: rabbitmq-secrets
+      key: uri
