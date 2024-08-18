@@ -12,7 +12,7 @@ COPY . .
 
 RUN go build -o /bin/app ./cmd/api
 
-FROM alpine:latest
+FROM scratch
 
 WORKDIR /app
 
