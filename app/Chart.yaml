@@ -2,8 +2,8 @@ apiVersion: v2
 name: expenses
 description: A Helm chart for deploying the expenses services
 type: application
-version: 0.0.0
-appVersion: 0.0.0
+version: 1.0.0
+appVersion: 1.0.0
 home: https://github.com/hasAnybodySeenHarry/debt-tracker
 sources:
 - https://github.com/hasAnybodySeenHarry/debt-tracker
