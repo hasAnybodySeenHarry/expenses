@@ -92,3 +92,10 @@ jobs:
         push: true
         tags: |
           docker.io/${{ secrets.DOCKERHUB_USERNAME }}/expenses:latest
+
+  package-helm:
+    runs-on: ubuntu-latest
+    needs: [unit-tests, static-analysis, validate-helm]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
