@@ -10,7 +10,7 @@ import (
 
 func (app *application) createTransactionHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
-		DebtID      int64   `json:"debt_id"`
+		DebtID      *int64  `json:"debt_id"`
 		Amount      float64 `json:"amount"`
 		Description string  `json:"description"`
 	}
@@ -21,20 +21,26 @@ func (app *application) createTransactionHandler(w http.ResponseWriter, r *http.
 		return
 	}
 
+	v := validator.New()
+
+	if input.DebtID == nil || *input.DebtID == 0 {
+		v.AddError("debt's id", "must be provided")
+		app.failedValidation(w, r, v.Errors)
+	}
+
 	t := &data.Transaction{
-		DebtID:      input.DebtID,
+		DebtID:      *input.DebtID,
 		Amount:      input.Amount,
 		Description: input.Description,
 	}
 
-	v := validator.New()
 	if data.ValidateTransaction(v, t); !v.Validate() {
 		app.failedValidation(w, r, v.Errors)
 		return
 	}
 
 	u := app.getUser(r)
-	debt, err := app.models.Debts.GetByID(input.DebtID)
+	debt, err := app.models.Debts.GetByID(t.DebtID)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrNoRecord):

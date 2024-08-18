@@ -23,18 +23,12 @@ func main() {
 
 	l := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
-	db, err := openDB(&cfg.db)
+	db, conn, err := initDependencies(cfg, l)
 	if err != nil {
 		l.Fatalln(err)
 	}
-	l.Println("Successfully connected to the database")
 	defer db.Close()
-
-	conn, err := openAMQP(cfg.amqp)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	l.Println("Successfully connected to the messaging proxy")
+	defer conn.Close()
 
 	mailer, err := mailer.New(conn, "email_queue")
 	if err != nil {

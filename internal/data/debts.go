@@ -79,7 +79,7 @@ func (m DebtModel) GetForUserByCategories(userID int64) ([]*Debt, error) {
 		FROM debts
 		INNER JOIN users lender ON debts.lender_id = lender.id
 		INNER JOIN users borrower ON debts.borrower_id = borrower.id
-		WHERE debts.borrower.id = $1
+		WHERE debts.borrower_id = $1
 		ORDER BY debts.id DESC;
 	`
 
