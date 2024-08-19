@@ -10,7 +10,7 @@ spec:
         image: alpine:latest
         env:
         - name: PGPASSWORD
-          value: "password" # Replace with your actual password
+          value: "password"
         command:
         - /bin/sh
         - -c

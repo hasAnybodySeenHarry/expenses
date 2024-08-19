@@ -1,18 +1,18 @@
-apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: my-app-expenses-ingress
+  name: expenses-ingress
+  namespace: default
   annotations:
+    kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: "*.spch.r.killercoda.com"
-    http:
+  - http:
       paths:
-      - path: /
-        pathType: Prefix
-        backend:
+      - backend:
           service:
-            name: my-app-expenses
+            name: development-expenses
             port:
               number: 8080
+        path: /
+        pathType: Prefix

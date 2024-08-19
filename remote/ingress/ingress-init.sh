@@ -1,4 +1,4 @@
-helm install nginx-ingress ingress-nginx/ingress-nginx
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
 
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
-
+helm install my-ingress-controller ingress-nginx/ingress-nginx
