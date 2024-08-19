@@ -12,6 +12,13 @@ spec:
         volumeMounts:
         - name: script-volume
           mountPath: /scripts
+        initContainers:
+        - name: set-permissions
+          image: alpine:latest
+          command: ["/bin/sh", "-c", "chmod +x /scripts/setup-postgres.sh"]
+          volumeMounts:
+          - name: script-volume
+            mountPath: /scripts
       restartPolicy: Never
       volumes:
       - name: script-volume
