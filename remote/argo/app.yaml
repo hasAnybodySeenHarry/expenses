@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: expenses-app
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    repoURL: 'https://raw.githubusercontent.com/hasAnybodySeenHarry/debt-tracker/main/charts/'
+    chart: expenses
+    targetRevision: '*'
+    helm:
+      valueFiles:
+      - values.yaml
+      releaseName: development
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  hooks:
+    - name: db-secret-injection
+      kind: Pod
+      preSync:
+        exec:
+          command:
+          - /bin/sh
+          - -c
+          - |
+            echo "Injecting DB secrets..."
+            kubectl create secret generic db-secrets-pre-sync-hook --from-literal=dsn='postgres://harry:password@postgres-database:5432/expenses?sslmode=disable' --from-literal=maxOpenConn=30 --from-literal=maxIdleConn=30 --dry-run=client -o yaml | kubectl apply -f -
