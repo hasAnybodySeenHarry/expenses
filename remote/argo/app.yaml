@@ -20,14 +20,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-  hooks:
-    - name: db-secret-injection
-      kind: Pod
-      preSync:
-        exec:
-          command:
-          - /bin/sh
-          - -c
-          - |
-            echo "Injecting DB secrets..."
-            kubectl create secret generic db-secrets-pre-sync-hook --from-literal=dsn='postgres://harry:password@postgres-database:5432/expenses?sslmode=disable' --from-literal=maxOpenConn=30 --from-literal=maxIdleConn=30 --dry-run=client -o yaml | kubectl apply -f -
