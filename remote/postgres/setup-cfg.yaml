@@ -4,15 +4,18 @@ metadata:
   name: postgres-setup-script
 data:
   setup-postgres.sh: |
-    #!/bin/bash
-    
+    #!/bin/sh
+    set -e
+
+    # Install necessary tools
+    echo "Installing necessary tools..."
+    apk add --no-cache git wget postgresql-client
+
     # Install go-migrate
+    echo "Installing go-migrate..."
     wget https://github.com/golang-migrate/migrate/releases/download/v4.14.1/migrate.linux-amd64.tar.gz
     tar -xzf migrate.linux-amd64.tar.gz
-    sudo mv migrate.linux-amd64 /usr/local/bin/migrate
-    migrate -version
-
-    set -e
+    mv migrate.linux-amd64 /usr/local/bin/migrate
 
     # Wait for PostgreSQL to be ready
     echo "Waiting for PostgreSQL to be ready..."

@@ -1,31 +1,20 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: postgres-setup-job
+  name: postgres-setup
 spec:
   template:
     spec:
       containers:
-      - name: setup
+      - name: setup-script
         image: alpine:latest
-        command: ["/bin/sh", "/scripts/setup-postgres.sh"]
-        env:
-        - name: POSTGRES_USER
-          value: "harry"
-        - name: POSTGRES_PASSWORD
-          value: "password"
-        - name: POSTGRES_DB
-          value: "expenses"
+        command: ["/bin/sh", "-c", "/scripts/setup-postgres.sh"]
         volumeMounts:
-        - name: script
+        - name: script-volume
           mountPath: /scripts
-        - name: migrations
-          mountPath: /migrations
-      restartPolicy: OnFailure
+      restartPolicy: Never
       volumes:
-      - name: script
+      - name: script-volume
         configMap:
           name: postgres-setup-script
-      - name: migrations
-        emptyDir: {}
-  backoffLimit: 3
+  backoffLimit: 4
