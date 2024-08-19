@@ -1,31 +1,48 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: postgres-setup
+  name: postgres-setup-job
 spec:
   template:
     spec:
       containers:
-      - name: setup-script
+      - name: setup
         image: alpine:latest
-        command: ["/bin/sh", "-c", "/tmp/setup-postgres.sh"]
-        volumeMounts:
-        - name: script-volume
-          mountPath: /tmp
-      initContainers:
-      - name: copy-script
-        image: alpine:latest
-        command: ["/bin/sh", "-c", "cp /scripts/setup-postgres.sh /tmp/ && chmod +x /tmp/setup-postgres.sh"]
-        volumeMounts:
-        - name: script-volume
-          mountPath: /scripts
-        - name: writable-volume
-          mountPath: /tmp
+        env:
+        - name: PGPASSWORD
+          value: "password" # Replace with your actual password
+        command:
+        - /bin/sh
+        - -c
+        - |
+          echo "Installing necessary tools..."
+          apk add --no-cache git wget postgresql-client
+
+          echo "Installing go-migrate..."
+          wget https://github.com/golang-migrate/migrate/releases/download/v4.14.1/migrate.linux-amd64.tar.gz
+          tar -xzf migrate.linux-amd64.tar.gz
+          mv migrate.linux-amd64 /usr/local/bin/migrate
+
+          echo "Waiting for PostgreSQL to be ready..."
+          until psql -h postgres-database -U harry -d expenses -c '\q'; do
+            sleep 2
+          done
+
+          echo "PostgreSQL is ready."
+
+          echo "Installing extensions..."
+          psql -h postgres-database -U harry -d expenses <<EOF
+          CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+          CREATE EXTENSION IF NOT EXISTS "citext";
+          EOF
+
+          echo "Extensions installed."
+
+          echo "Cloning repository for migrations..."
+          git clone https://github.com/hasAnybodySeenHarry/debt-tracker.git /migrations
+
+          echo "Running migrations..."
+          migrate -path /migrations/migrations -database postgres://harry:password@postgres-database:5432/expenses?sslmode=disable up
+
+          echo "Migrations applied."
       restartPolicy: Never
-      volumes:
-      - name: script-volume
-        configMap:
-          name: postgres-setup-script
-      - name: writable-volume
-        emptyDir: {}
-  backoffLimit: 4
