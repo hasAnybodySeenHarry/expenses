@@ -8,20 +8,24 @@ spec:
       containers:
       - name: setup-script
         image: alpine:latest
-        command: ["/bin/sh", "-c", "/scripts/setup-postgres.sh"]
+        command: ["/bin/sh", "-c", "/tmp/setup-postgres.sh"]
         volumeMounts:
         - name: script-volume
-          mountPath: /scripts
+          mountPath: /tmp
       initContainers:
-      - name: set-permissions
+      - name: copy-script
         image: alpine:latest
-        command: ["/bin/sh", "-c", "chmod +x /scripts/setup-postgres.sh"]
+        command: ["/bin/sh", "-c", "cp /scripts/setup-postgres.sh /tmp/ && chmod +x /tmp/setup-postgres.sh"]
         volumeMounts:
         - name: script-volume
           mountPath: /scripts
+        - name: writable-volume
+          mountPath: /tmp
       restartPolicy: Never
       volumes:
       - name: script-volume
         configMap:
           name: postgres-setup-script
+      - name: writable-volume
+        emptyDir: {}
   backoffLimit: 4
