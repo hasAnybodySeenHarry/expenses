@@ -11,6 +11,17 @@ spec:
     ports:
     - containerPort: 8080
     imagePullPolicy: Always
+    env:
+    - name: PORT
+      value: "4000"
+    - name: ENV
+      value: "development"
+    - name: ADDR
+      value: "redis-service:6379"
+    - name: PASSWORD
+      value: "password"
+    - name: DB
+      value: "0"
   restartPolicy: Always
 ---
 apiVersion: v1
