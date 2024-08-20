@@ -21,10 +21,6 @@ type db struct {
 }
 
 func loadConfig(cfg *config) {
-	// public.ecr.aws/docker/library/postgres:latest
-	// postgres:alpine
-	// postgres:latest
-
 	flag.IntVar(&cfg.port, "port", getEnvInt("PORT", 4000), "The port that the server listens at")
 	flag.StringVar(&cfg.env, "env", os.Getenv("ENV"), "The environment of the server")
 

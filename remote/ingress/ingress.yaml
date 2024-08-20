@@ -15,14 +15,11 @@ metadata:
 
         local rate_limit_service_url = "http://throttler.default.svc.cluster.local:8080/ratelimit"
 
-        local auth_header = ngx.req.get_headers()["Authorization"]
-
         local function check_rate_limit()
             local res, err = httpc:request_uri(rate_limit_service_url, {
                 method = "GET",
                 headers = {
                     ["Content-Type"] = "application/json",
-                    ["Authorization"] = auth_header,
                 }
             })
 
