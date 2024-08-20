@@ -1,11 +1,60 @@
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: expenses-ingress
   namespace: default
   annotations:
-    kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/server-snippet: |
+      access_by_lua_block {
+        local http = require "resty.http"
+        local cjson = require "cjson"
+
+        local httpc = http.new()
+        httpc:set_timeout(5000)
+
+        local rate_limit_service_url = "http://throttler.default.svc.cluster.local:8080/ratelimit"
+
+        local auth_header = ngx.req.get_headers()["Authorization"]
+
+        local function check_rate_limit()
+            local res, err = httpc:request_uri(rate_limit_service_url, {
+                method = "GET",
+                headers = {
+                    ["Content-Type"] = "application/json",
+                    ["Authorization"] = auth_header,
+                }
+            })
+
+            if not res then
+                ngx.log(ngx.ERR, "failed to request rate limit service: ", err)
+                return ngx.HTTP_INTERNAL_SERVER_ERROR, nil
+            end
+
+            if res.status == 200 then
+                return ngx.OK, nil
+            else
+                local error_response = cjson.encode({
+                    error = "too many requests",
+                    message = "try again later"
+                })
+
+                ngx.status = res.status
+                ngx.header.content_type = "application/json"
+                ngx.say(error_response)
+                ngx.exit(ngx.status)
+            end
+        end
+
+        local status, err = check_rate_limit()
+
+        if status ~= ngx.OK then
+            ngx.log(ngx.ERR, "rate limit check failed: ", err)
+            ngx.exit(status)
+        end
+      }
 spec:
+  ingressClassName: "nginx"
   rules:
   - http:
       paths:
