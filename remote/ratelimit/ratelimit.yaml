@@ -12,6 +12,8 @@ spec:
     - containerPort: 8080
     imagePullPolicy: Always
     env:
+    - name: GRPC-ADDR
+      value: "development-expenses"
     - name: PORT
       value: "8080"
     - name: ENV
