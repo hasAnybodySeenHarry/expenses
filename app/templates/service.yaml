@@ -11,5 +11,9 @@ spec:
     port: {{ .Values.service.port }}
     targetPort: {{ .Values.service.internalPort | default "http" }}
     protocol: TCP
+  - name: grpc
+    port: {{ .Values.service.grpcPort }}
+    targetPort: grpc
+    protocol: TCP
   selector:
     {{- include "app.selectorLabels" . | nindent 4 }}
