@@ -83,7 +83,7 @@ podDisruptionBudget:
 
 env:
 - name: TCP
-  value: 50051
+  value: "50051"
 - name: DSN
   valueFrom:
     secretKeyRef:
