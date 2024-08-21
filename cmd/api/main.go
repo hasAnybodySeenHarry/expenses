@@ -43,8 +43,23 @@ func main() {
 		mailer: mailer,
 	}
 
-	err = app.serve()
-	if err != nil {
-		app.logger.Fatalln(err)
-	}
+	var servers sync.WaitGroup
+	servers.Add(2)
+
+	go func() {
+		defer servers.Done()
+		if err := app.grpc(cfg.tcp); err != nil {
+			app.logger.Fatalln("gRPC server stopped with error:", err)
+		}
+	}()
+
+	go func() {
+		defer servers.Done()
+		if err := app.serve(); err != nil {
+			app.logger.Fatalln("HTTP server stopped with error:", err)
+		}
+	}()
+
+	servers.Wait()
+	app.logger.Println("Both servers have stopped gracefully.")
 }

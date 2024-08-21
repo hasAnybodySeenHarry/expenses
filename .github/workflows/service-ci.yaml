@@ -14,7 +14,7 @@ on:
     - 'charts/**'
 
 env:
-  GO_VERSION: '1.20'
+  GO_VERSION: '1.22'
   HELM_VERSION: 'v3.13.3'
   HELM_FOLDER: ./app
 

@@ -1,7 +1,7 @@
 service:
   type: ClusterIP
   port: 8080
-  internalPort: 4000
+  internalPort: 8080
 
 db:
   dsn: postgres://harry:password@postgres-database:5432/expenses?sslmode=disable

@@ -12,6 +12,7 @@ type config struct {
 	env  string
 	db   db
 	amqp string
+	tcp  int
 }
 
 type db struct {
@@ -21,6 +22,8 @@ type db struct {
 }
 
 func loadConfig(cfg *config) {
+	flag.IntVar(&cfg.tcp, "tcp", getEnvInt("TCP", 50051), "The port that the grpc server listens at")
+
 	flag.IntVar(&cfg.port, "port", getEnvInt("PORT", 4000), "The port that the server listens at")
 	flag.StringVar(&cfg.env, "env", os.Getenv("ENV"), "The environment of the server")
 

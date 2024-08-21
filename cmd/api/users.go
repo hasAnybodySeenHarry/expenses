@@ -1,11 +1,15 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
 	"time"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"harry2an.com/expenses/cmd/proto/users"
 	"harry2an.com/expenses/internal/data"
 	"harry2an.com/expenses/internal/validator"
 )
@@ -76,4 +80,28 @@ func (app *application) registerHandler(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		app.serverError(w, r, err)
 	}
+}
+
+type userServiceServer struct {
+	users.UnimplementedUserServiceServer
+	models *data.Models
+}
+
+func (s *userServiceServer) GetUserForToken(ctx context.Context, req *users.GetUserRequest) (*users.GetUserResponse, error) {
+	v := validator.New()
+	if data.ValidateToken(v, req.Token); !v.Validate() {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid token: failed to validate")
+	}
+
+	user, err := s.models.Users.GetForToken(req.Token, data.ScopeAuthentication)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrNoRecord):
+			return nil, status.Errorf(codes.Unauthenticated, "invalid authentication token")
+		default:
+			return nil, status.Errorf(codes.Internal, "internal server error: %v", err)
+		}
+	}
+
+	return data.UserToProto(user), nil
 }

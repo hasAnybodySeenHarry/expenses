@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
+	"google.golang.org/grpc"
+	"harry2an.com/expenses/cmd/proto/users"
 )
 
 func (app *application) routes() http.Handler {
@@ -29,4 +31,9 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodPost, "/v1/auth/login", app.loginHandler)
 
 	return router
+}
+
+func (app *application) register(server *grpc.Server) {
+	userService := &userServiceServer{models: &app.models}
+	users.RegisterUserServiceServer(server, userService)
 }

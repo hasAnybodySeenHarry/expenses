@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
+	"harry2an.com/expenses/cmd/proto/users"
 	"harry2an.com/expenses/internal/validator"
 )
 
@@ -172,4 +173,16 @@ func (m UserModel) GetByEmail(email string) (*User, error) {
 	}
 
 	return &user, nil
+}
+
+func UserToProto(user *User) *users.GetUserResponse {
+	if user == nil {
+		return nil
+	}
+	return &users.GetUserResponse{
+		Id:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		Activated: user.Activated,
+	}
 }

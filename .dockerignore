@@ -3,6 +3,7 @@
 app/
 bin/
 migrations/
+charts/
 remote/
 
 Dockerfile

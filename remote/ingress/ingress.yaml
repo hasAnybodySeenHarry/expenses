@@ -13,14 +13,22 @@ metadata:
         local httpc = http.new()
         httpc:set_timeout(5000)
 
-        local rate_limit_service_url = "http://throttler.default.svc.cluster.local:8080/ratelimit"
+        local rate_limit_service_url = "http://throttler.default.svc.cluster.local:8080/v1/ratelimit"
 
         local function check_rate_limit()
+            local authorization_header = ngx.req.get_headers()["Authorization"]
+
+            local headers = {
+                ["Content-Type"] = "application/json",
+            }
+
+            if authorization_header then
+                headers["Authorization"] = authorization_header
+            end
+
             local res, err = httpc:request_uri(rate_limit_service_url, {
                 method = "GET",
-                headers = {
-                    ["Content-Type"] = "application/json",
-                }
+                headers = headers,
             })
 
             if not res then

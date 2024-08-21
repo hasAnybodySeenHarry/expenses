@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "harry2an.com/expenses/cmd/proto;users";
+
+message GetUserRequest {
+    string token = 1;
+}
+
+message GetUserResponse {
+    int64 id = 1;
+    string name = 2;
+    string email = 3;
+    bool activated = 4;
+}
+
+service UserService {
+    rpc GetUserForToken (GetUserRequest) returns (GetUserResponse);
+}
