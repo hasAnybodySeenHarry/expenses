@@ -39,14 +39,9 @@ metadata:
             if res.status == 200 then
                 return ngx.OK, nil
             else
-                local error_response = cjson.encode({
-                    error = "too many requests",
-                    message = "try again later"
-                })
-
                 ngx.status = res.status
-                ngx.header.content_type = "application/json"
-                ngx.say(error_response)
+                ngx.header.content_type = res.headers["Content-Type"] or "application/json"
+                ngx.say(res.body)
                 ngx.exit(ngx.status)
             end
         end
