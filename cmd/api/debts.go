@@ -74,6 +74,7 @@ func (app *application) createDebtHandler(w http.ResponseWriter, r *http.Request
 		switch {
 		case errors.Is(err, data.ErrDuplicateCategory):
 			v.AddError("category", "already exists")
+			app.failedValidation(w, r, v.Errors)
 		case errors.Is(err, data.ErrUserForeignKey):
 			app.badRequest(w, r, errors.New("invalid lender's id"))
 		default:
