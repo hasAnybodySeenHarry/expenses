@@ -14,26 +14,30 @@ func (app *application) routes() http.Handler {
 	router.NotFound = http.HandlerFunc(app.notFound)
 
 	// meta
-	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.healthcheckHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.healthcheck)
 
 	// users
-	router.HandlerFunc(http.MethodPost, "/v1/users", app.registerHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/users", app.register)
+
+	// relations
+	router.HandlerFunc(http.MethodGet, "/v1/users", app.mustAuth(app.getRelations))
 
 	// transactions
-	router.HandlerFunc(http.MethodPost, "/v1/transactions", app.mustAuth(app.createTransactionHandler))
+	router.HandlerFunc(http.MethodPost, "/v1/transactions", app.mustAuth(app.createTransaction))
+	router.HandlerFunc(http.MethodGet, "/v1/transactions/:id", app.mustAuth(app.showTransactions))
 
 	// debts
-	router.HandlerFunc(http.MethodGet, "/v1/debts", app.mustAuth(app.showDebtsHandler))
-	router.HandlerFunc(http.MethodPost, "/v1/debts", app.mustAuth(app.createDebtHandler))
-	router.HandlerFunc(http.MethodDelete, "/v1/debts/:id", app.mustAuth(app.deleteDebtHandler))
+	router.HandlerFunc(http.MethodGet, "/v1/debts", app.mustAuth(app.showDebts))
+	router.HandlerFunc(http.MethodPost, "/v1/debts", app.mustAuth(app.createDebt))
+	router.HandlerFunc(http.MethodDelete, "/v1/debts/:id", app.mustAuth(app.deleteDebt))
 
 	// auth
-	router.HandlerFunc(http.MethodPost, "/v1/auth/login", app.loginHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/auth/login", app.login)
 
 	return app.enableCORS(router)
 }
 
-func (app *application) register(server *grpc.Server) {
+func (app *application) registerGRPCservers(server *grpc.Server) {
 	userService := &userServiceServer{models: &app.models}
 	users.RegisterUserServiceServer(server, userService)
 }

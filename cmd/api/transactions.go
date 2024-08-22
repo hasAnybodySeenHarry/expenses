@@ -8,7 +8,7 @@ import (
 	"harry2an.com/expenses/internal/validator"
 )
 
-func (app *application) createTransactionHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) createTransaction(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		DebtID      *int64  `json:"debt_id"`
 		Amount      float64 `json:"amount"`
@@ -26,6 +26,7 @@ func (app *application) createTransactionHandler(w http.ResponseWriter, r *http.
 	if input.DebtID == nil || *input.DebtID == 0 {
 		v.AddError("debt's id", "must be provided")
 		app.failedValidation(w, r, v.Errors)
+		return
 	}
 
 	t := &data.Transaction{
@@ -76,6 +77,38 @@ func (app *application) createTransactionHandler(w http.ResponseWriter, r *http.
 		"transaction": t,
 		"new_total":   amount,
 	}, nil)
+	if err != nil {
+		app.serverError(w, r, err)
+	}
+}
+
+func (app *application) showTransactions(w http.ResponseWriter, r *http.Request) {
+	var f data.Filters
+
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.badRequest(w, r, err)
+		return
+	}
+
+	q := r.URL.Query()
+	v := validator.New()
+
+	f.Page = app.readInt(q, "page", 1, v)
+	f.PageSize = app.readInt(q, "page_size", 10, v)
+
+	if data.ValidateFilters(v, &f); !v.Validate() {
+		app.failedValidation(w, r, v.Errors)
+		return
+	}
+
+	transactions, meta, err := app.models.Transactions.GetAll(id, f)
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"data": transactions, "metadata": meta}, nil)
 	if err != nil {
 		app.serverError(w, r, err)
 	}

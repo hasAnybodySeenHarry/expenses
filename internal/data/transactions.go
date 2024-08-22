@@ -97,3 +97,45 @@ func (m TransactionModel) Insert(t *Transaction) (float64, error) {
 
 	return newTotal, nil
 }
+
+func (m TransactionModel) GetAll(debtID int64, f Filters) ([]Transaction, Metadata, error) {
+	stmt := `
+		SELECT count(*) OVER(), id, debt_id, amount, description, created_at, version
+		FROM transactions
+		WHERE debt_id = $1
+		ORDER BY id ASC
+		LIMIT $2
+		OFFSET $3
+	`
+
+	args := []interface{}{debtID, f.limit(), f.offset()}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.db.QueryContext(ctx, stmt, args...)
+	if err != nil {
+		return nil, Metadata{}, err
+	}
+	defer rows.Close()
+
+	transactions := make([]Transaction, 0, f.limit())
+	var total int
+
+	for rows.Next() {
+		var t Transaction
+		err := rows.Scan(&total, &t.ID, &t.DebtID, &t.Amount, &t.Description, &t.CreatedAt, &t.Version)
+		if err != nil {
+			return nil, Metadata{}, err
+		}
+		transactions = append(transactions, t)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, Metadata{}, err
+	}
+
+	meta := getMetadata(f.Page, f.PageSize, total)
+
+	return transactions, meta, nil
+}

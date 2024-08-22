@@ -9,7 +9,7 @@ import (
 	"harry2an.com/expenses/internal/validator"
 )
 
-func (app *application) showDebtsHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) showDebts(w http.ResponseWriter, r *http.Request) {
 	user := app.getUser(r)
 
 	debts, err := app.models.Debts.GetForUserByCategories(user.ID)
@@ -24,7 +24,7 @@ func (app *application) showDebtsHandler(w http.ResponseWriter, r *http.Request)
 	}
 }
 
-func (app *application) createDebtHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) createDebt(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		LenderID *int64  `json:"lender_id"`
 		Total    float64 `json:"total"`
@@ -89,7 +89,7 @@ func (app *application) createDebtHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (app *application) deleteDebtHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) deleteDebt(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.notFound(w, r)

@@ -19,7 +19,7 @@ func TestHealthcheckHandler(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(app.healthcheckHandler)
+	handler := http.HandlerFunc(app.healthcheck)
 
 	handler.ServeHTTP(rr, req)
 

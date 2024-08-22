@@ -9,7 +9,7 @@ import (
 	"harry2an.com/expenses/internal/validator"
 )
 
-func (app *application) loginHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) login(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
