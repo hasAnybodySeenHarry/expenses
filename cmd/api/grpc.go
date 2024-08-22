@@ -17,7 +17,7 @@ func (app *application) grpc(port int) error {
 	server := grpc.NewServer()
 	reflection.Register(server)
 
-	app.register(server)
+	app.registerGRPCservers(server)
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {

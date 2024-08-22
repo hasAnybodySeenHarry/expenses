@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) healthcheck(w http.ResponseWriter, r *http.Request) {
 	data := envelope{
 		"status": true,
 		"time":   time.Now(),

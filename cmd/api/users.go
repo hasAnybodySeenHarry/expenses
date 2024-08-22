@@ -14,7 +14,7 @@ import (
 	"harry2an.com/expenses/internal/validator"
 )
 
-func (app *application) registerHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) register(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Name     string `json:"name"`
 		Email    string `json:"email"`

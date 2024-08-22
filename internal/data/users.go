@@ -16,11 +16,11 @@ import (
 type User struct {
 	ID        int64     `json:"id"`
 	Name      string    `json:"name"`
-	Email     string    `json:"email"`
+	Email     string    `json:"email,omitempty"`
 	Password  password  `json:"-"`
-	Activated bool      `json:"activated"`
+	Activated bool      `json:"activated,omitempty"`
 	CreatedAt time.Time `json:"-"`
-	Version   uuid.UUID `json:"version"`
+	Version   uuid.UUID `json:"version,omitempty"`
 }
 
 type password struct {
@@ -173,6 +173,43 @@ func (m UserModel) GetByEmail(email string) (*User, error) {
 	}
 
 	return &user, nil
+}
+
+func (m UserModel) GetAll(exclude int64) ([]*User, error) {
+	stmt := `
+		SELECT id, name
+		FROM users
+		WHERE id != $1
+		ORDER BY id ASC
+	`
+
+	users := make([]*User, 0)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.db.QueryContext(ctx, stmt, exclude)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var u User
+		u.Version = uuid.Nil
+
+		err := rows.Scan(&u.ID, &u.Name)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, &u)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
 
 func UserToProto(user *User) *users.GetUserResponse {

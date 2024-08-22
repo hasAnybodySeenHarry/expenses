@@ -6,10 +6,12 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 
 	"github.com/julienschmidt/httprouter"
+	"harry2an.com/expenses/internal/validator"
 )
 
 type envelope map[string]interface{}
@@ -99,4 +101,19 @@ func (app *application) background(fn func()) {
 
 		fn()
 	}()
+}
+
+func (app *application) readInt(q url.Values, key string, defaultVal int, v *validator.Validator) int {
+	val := q.Get(key)
+	if val == "" {
+		return defaultVal
+	}
+
+	i, err := strconv.Atoi(val)
+	if err != nil {
+		v.AddError(key, "must be an integer")
+		return defaultVal
+	}
+
+	return i
 }
