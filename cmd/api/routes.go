@@ -30,7 +30,7 @@ func (app *application) routes() http.Handler {
 	// auth
 	router.HandlerFunc(http.MethodPost, "/v1/auth/login", app.loginHandler)
 
-	return router
+	return app.enableCORS(router)
 }
 
 func (app *application) register(server *grpc.Server) {
