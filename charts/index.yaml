@@ -3,9 +3,9 @@ entries:
   expenses:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-08-22T14:25:39.095673239Z"
+    created: "2024-08-22T19:11:40.022865204Z"
     description: A Helm chart for deploying the expenses services
-    digest: 7622c4b897275962cdca85760974e7cc34e6e3ae5da3850c288f906ac85aec23
+    digest: fd146ccb45b6381411f811310fe91340d80dd22a1b85e593ed7bcbd2d81a5e64
     home: https://github.com/hasAnybodySeenHarry/debt-tracker
     name: expenses
     sources:
@@ -14,4 +14,4 @@ entries:
     urls:
     - https://raw.githubusercontent.com/hasAnybodySeenHarry/debt-tracker/main/charts/expenses-1.0.0.tgz
     version: 1.0.0
-generated: "2024-08-22T14:25:39.095041142Z"
+generated: "2024-08-22T19:11:40.022300226Z"
