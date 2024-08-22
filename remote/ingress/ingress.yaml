@@ -33,6 +33,12 @@ metadata:
 
             if not res then
                 ngx.log(ngx.ERR, "failed to request rate limit service: ", err)
+                ngx.status = ngx.HTTP_INTERNAL_SERVER_ERROR
+                ngx.say(cjson.encode({
+                    error = "service_unavailable",
+                    message = "Rate limit service is temporarily unavailable"
+                }))
+                ngx.exit(ngx.status)
                 return ngx.HTTP_INTERNAL_SERVER_ERROR, nil
             end
 
@@ -49,7 +55,6 @@ metadata:
         local status, err = check_rate_limit()
 
         if status ~= ngx.OK then
-            ngx.log(ngx.ERR, "rate limit check failed: ", err)
             ngx.exit(status)
         end
       }
