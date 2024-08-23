@@ -14,6 +14,10 @@ import (
 	"harry2an.com/expenses/internal/validator"
 )
 
+const (
+	isBlank = "is blank"
+)
+
 type User struct {
 	ID        int64     `json:"id"`
 	Name      string    `json:"name"`
@@ -55,9 +59,9 @@ func (p *password) Create(pwd string) error {
 }
 
 func ValidateUser(v *validator.Validator, u *User) {
-	v.Check(u.Name != "", "name", "is blank")
+	v.Check(u.Name != "", "name", isBlank)
 	v.Check(len(u.Name) <= 100, "name", "must not exceed 100 chars")
-	v.Check(u.Email != "", "email", "is blank")
+	v.Check(u.Email != "", "email", isBlank)
 
 	if u.Password.text != nil {
 		ValidatePassword(v, *u.Password.text)
@@ -69,7 +73,7 @@ func ValidateUser(v *validator.Validator, u *User) {
 }
 
 func ValidatePassword(v *validator.Validator, pwd string) {
-	v.Check(pwd != "", "password", "is blank")
+	v.Check(pwd != "", "password", isBlank)
 	v.Check(len(pwd) >= 8, "password", "must be at least 8 chars long")
 	v.Check(len(pwd) <= 72, "password", "must not exceed 72 chars")
 }
