@@ -2,13 +2,15 @@
 .git/
 app/
 bin/
-migrations/
 charts/
+migrations/
 remote/
 
-Dockerfile
+.gitignore
 docker-compose.yaml
 Makefile
-README.md
+Dockerfile
 setup.sh
-.gitignore
+sonar-project.properties
+sonar.sh
+README.md

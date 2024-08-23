@@ -5,12 +5,23 @@ service:
   grpcPort: 50051
 
 db:
-  dsn: postgres://harry:password@postgres-database:5432/expenses?sslmode=disable
+  host: postgres-database
+  username: harry
+  password: password
+  database: expenses
+  port: 5432
   maxOpenConn: 30
   maxIdleConn: 30
 
 rabbitmq:
-  uri: amqp://harry:password@rabbitmq:5672/
+  username: harry
+  password: password
+  host: rabbitmq-proxy
+  port: 5672
+
+pubsub:
+  host: kafka-node
+  port: 9092
 
 replicaCount: 1
 
@@ -82,27 +93,62 @@ podDisruptionBudget:
   maxUnavailable: ""
 
 env:
-- name: TCP
+- name: GRPC_PORT
   value: "50051"
 - name: PORT
   value: "8080"
-- name: DSN
+- name: DB_USERNAME
   valueFrom:
     secretKeyRef:
       name: db-secrets
-      key: dsn
-- name: MAX-OPEN-CONN
+      key: username
+- name: DB_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: db-secrets
+      key: password
+- name: DB_PORT
+  valueFrom:
+    secretKeyRef:
+      name: db-secrets
+      key: port
+- name: MAX_OPEN_CONN
   valueFrom:
     secretKeyRef:
       name: db-secrets
       key: maxOpenConn
-- name: MAX-IDLE-CONN
+- name: MAX_IDLE_CONN
   valueFrom:
     secretKeyRef:
       name: db-secrets
       key: maxIdleConn
-- name: AMQP_URI
+- name: AMQP_USERNAME
   valueFrom:
     secretKeyRef:
       name: rabbitmq-secrets
-      key: uri
+      key: username
+- name: AMQP_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: rabbitmq-secrets
+      key: password
+- name: AMQP_HOST
+  valueFrom:
+    secretKeyRef:
+      name: rabbitmq-secrets
+      key: host
+- name: AMQP_PORT
+  valueFrom:
+    secretKeyRef:
+      name: rabbitmq-secrets
+      key: port
+- name: PUB_HOST
+  valueFrom:
+    secretKeyRef:
+      name: pubsub-secrets
+      key: host
+- name: PUB_PORT
+  valueFrom:
+    secretKeyRef:
+      name: pubsub-secrets
+      key: port

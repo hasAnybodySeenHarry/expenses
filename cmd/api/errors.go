@@ -58,3 +58,7 @@ func (app *application) conflict(w http.ResponseWriter, r *http.Request) {
 func (app *application) invalidCredentials(w http.ResponseWriter, r *http.Request) {
 	app.error(w, r, http.StatusUnauthorized, "invalid credentials")
 }
+
+func (app *application) accepted(w http.ResponseWriter, r *http.Request) {
+	app.error(w, r, http.StatusAccepted, http.StatusText(http.StatusAccepted))
+}

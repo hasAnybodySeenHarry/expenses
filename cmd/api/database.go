@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
 	"time"
 
@@ -13,7 +14,7 @@ func openDB(cfg *db, maxRetries int) (*sql.DB, error) {
 	var db *sql.DB
 	var err error
 
-	db, err = sql.Open("postgres", cfg.dsn)
+	db, err = sql.Open("postgres", fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable", cfg.username, cfg.password, cfg.host, cfg.port, cfg.name))
 	if err != nil {
 		return nil, err
 	}

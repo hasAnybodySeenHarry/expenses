@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"harry2an.com/expenses/internal/core"
 	"harry2an.com/expenses/internal/data"
 	"harry2an.com/expenses/internal/validator"
 )
@@ -47,16 +48,10 @@ func (app *application) createDebt(w http.ResponseWriter, r *http.Request) {
 	}
 
 	debt := &data.Debt{
-		Lender: struct {
-			ID   int64  `json:"id"`
-			Name string `json:"name,omitempty"`
-		}{
+		Lender: core.Entity{
 			ID: *input.LenderID,
 		},
-		Borrower: struct {
-			ID   int64  `json:"id"`
-			Name string `json:"name,omitempty"`
-		}{
+		Borrower: core.Entity{
 			ID:   u.ID,
 			Name: u.Name,
 		},
@@ -81,6 +76,24 @@ func (app *application) createDebt(w http.ResponseWriter, r *http.Request) {
 			app.serverError(w, r, err)
 		}
 		return
+	}
+
+	lender, err := app.models.Users.GetUsernameByID(debt.Lender.ID)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrNoRecord):
+			app.accepted(w, r)
+		default:
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	debt.Lender.Name = lender.Name
+
+	err = app.notifiers.Debts.Send(debt)
+	if err != nil {
+		app.log(r, err)
 	}
 
 	err = app.writeJSON(w, http.StatusCreated, envelope{"debt": debt}, nil)

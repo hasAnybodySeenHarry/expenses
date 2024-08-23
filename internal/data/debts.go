@@ -7,27 +7,18 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"harry2an.com/expenses/internal/core"
 	"harry2an.com/expenses/internal/validator"
 )
 
 type Debt struct {
-	ID int64 `json:"id"`
-
-	Lender struct {
-		ID   int64  `json:"id"`
-		Name string `json:"name,omitempty"`
-	} `json:"lender"`
-
-	Borrower struct {
-		ID   int64  `json:"id"`
-		Name string `json:"name,omitempty"`
-	} `json:"borrower"`
-
-	Category string  `json:"category"`
-	Total    float64 `json:"total"`
-
-	CreatedAt time.Time `json:"created_at"`
-	Version   uuid.UUID `json:"-"`
+	ID        int64       `json:"id"`
+	Lender    core.Entity `json:"lender"`
+	Borrower  core.Entity `json:"borrower"`
+	Category  string      `json:"category"`
+	Total     float64     `json:"total"`
+	CreatedAt time.Time   `json:"created_at"`
+	Version   uuid.UUID   `json:"-"`
 }
 
 func ValidateDebt(v *validator.Validator, d *Debt) {

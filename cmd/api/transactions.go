@@ -67,10 +67,32 @@ func (app *application) createTransaction(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	t.Borrower.ID = debt.Borrower.ID
+	t.Borrower.Name = u.Name
+
 	amount, err := app.models.Transactions.Insert(t)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
+	}
+
+	lender, err := app.models.Users.GetUsernameByID(debt.Lender.ID)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrNoRecord):
+			app.accepted(w, r)
+		default:
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	t.Lender.ID = lender.ID
+	t.Lender.Name = lender.Name
+
+	err = app.notifiers.Transactions.Send(t)
+	if err != nil {
+		app.log(r, err)
 	}
 
 	err = app.writeJSON(w, http.StatusCreated, envelope{

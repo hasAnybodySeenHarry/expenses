@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"harry2an.com/expenses/internal/core"
 	"harry2an.com/expenses/internal/validator"
 )
 
@@ -17,6 +18,9 @@ type Transaction struct {
 	Description string    `json:"description"`
 	CreatedAt   time.Time `json:"created_at"`
 	Version     uuid.UUID `json:"version"`
+
+	Lender   core.Entity `json:"lender"`
+	Borrower core.Entity `json:"borrower"`
 }
 
 func ValidateTransaction(v *validator.Validator, t *Transaction) {

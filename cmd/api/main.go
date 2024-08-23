@@ -7,14 +7,16 @@ import (
 
 	"harry2an.com/expenses/internal/data"
 	"harry2an.com/expenses/internal/mailer"
+	"harry2an.com/expenses/internal/notifier"
 )
 
 type application struct {
-	config config
-	wg     sync.WaitGroup
-	logger *log.Logger
-	models data.Models
-	mailer *mailer.Mailer
+	config    config
+	wg        sync.WaitGroup
+	logger    *log.Logger
+	models    data.Models
+	notifiers *notifier.Notifiers
+	mailer    *mailer.Mailer
 }
 
 func main() {
@@ -23,12 +25,13 @@ func main() {
 
 	l := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
-	db, conn, err := initDependencies(cfg, l)
+	db, conn, producer, err := initDependencies(cfg, l)
 	if err != nil {
 		l.Fatalln(err)
 	}
 	defer db.Close()
 	defer conn.Close()
+	defer producer.Close()
 
 	mailer, err := mailer.New(conn, "email_queue")
 	if err != nil {
@@ -37,10 +40,11 @@ func main() {
 	defer mailer.Close()
 
 	app := application{
-		config: cfg,
-		logger: l,
-		models: data.New(db),
-		mailer: mailer,
+		config:    cfg,
+		logger:    l,
+		models:    data.New(db),
+		mailer:    mailer,
+		notifiers: notifier.New(producer),
 	}
 
 	var servers sync.WaitGroup
@@ -48,7 +52,7 @@ func main() {
 
 	go func() {
 		defer servers.Done()
-		if err := app.grpc(cfg.tcp); err != nil {
+		if err := app.grpc(cfg.grpcPort); err != nil {
 			app.logger.Fatalln("gRPC server stopped with error:", err)
 		}
 	}()

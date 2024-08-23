@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"harry2an.com/expenses/cmd/proto/users"
+	"harry2an.com/expenses/internal/core"
 	"harry2an.com/expenses/internal/validator"
 )
 
@@ -210,6 +211,28 @@ func (m UserModel) GetAll(exclude int64) ([]*User, error) {
 	}
 
 	return users, nil
+}
+
+func (m UserModel) GetUsernameByID(userID int64) (*core.Entity, error) {
+	stmt := `
+		SELECT id, name
+		FROM users
+		WHERE id = $1
+	`
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var user core.Entity
+	err := m.db.QueryRowContext(ctx, stmt, userID).Scan(&user.ID, &user.Name)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, ErrNoRecord
+		}
+		return nil, err
+	}
+
+	return &user, nil
 }
 
 func UserToProto(user *User) *users.GetUserResponse {
