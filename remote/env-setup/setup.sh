@@ -19,6 +19,9 @@ kubectl apply -f https://raw.githubusercontent.com/hasAnybodySeenHarry/debt-trac
 
 kubectl apply -f https://raw.githubusercontent.com/hasAnybodySeenHarry/debt-tracker/main/remote/ratelimit/ratelimit.yaml
 
+kubectl apply -f https://raw.githubusercontent.com/hasAnybodySeenHarry/debt-tracker/main/remote/pub-sub/zookeeper.yaml
+kubectl apply -f https://raw.githubusercontent.com/hasAnybodySeenHarry/debt-tracker/main/remote/pub-sub/kafka.yaml
+
 kubectl apply -f https://raw.githubusercontent.com/hasAnybodySeenHarry/debt-tracker/main/remote/argo/repo.yaml
 kubectl apply -f https://raw.githubusercontent.com/hasAnybodySeenHarry/debt-tracker/main/remote/argo/app.yaml
 
