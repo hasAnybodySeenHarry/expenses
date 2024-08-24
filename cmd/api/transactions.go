@@ -52,23 +52,15 @@ func (app *application) createTransaction(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	if u.ID != debt.Lender.ID && u.ID != debt.Borrower.ID {
+	if !isAuthorizedUser(u, debt) {
 		app.forbidden(w, r)
 		return
 	}
 
-	if u.ID == debt.Borrower.ID && t.Amount <= 0 {
+	if !isTransactionAllowed(u, debt, t.Amount) {
 		app.forbidden(w, r)
 		return
 	}
-
-	if u.ID == debt.Lender.ID && t.Amount >= 0 {
-		app.forbidden(w, r)
-		return
-	}
-
-	t.Borrower.ID = debt.Borrower.ID
-	t.Borrower.Name = u.Name
 
 	amount, err := app.models.Transactions.Insert(t)
 	if err != nil {
@@ -76,19 +68,34 @@ func (app *application) createTransaction(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	lender, err := app.models.Users.GetUsernameByID(debt.Lender.ID)
+	t.Borrower.ID = debt.Borrower.ID
+	t.Lender.ID = debt.Lender.ID
+
+	// Fetch counterparty name
+	var counterpartyID int64
+	if u.ID == t.Borrower.ID {
+		counterpartyID = t.Lender.ID
+	} else {
+		counterpartyID = t.Borrower.ID
+	}
+
+	counterparty, err := app.models.Users.GetUsernameByID(counterpartyID)
 	if err != nil {
-		switch {
-		case errors.Is(err, data.ErrNoRecord):
+		if errors.Is(err, data.ErrNoRecord) {
 			app.accepted(w, r)
-		default:
+		} else {
 			app.serverError(w, r, err)
 		}
 		return
 	}
 
-	t.Lender.ID = lender.ID
-	t.Lender.Name = lender.Name
+	if u.ID == t.Borrower.ID {
+		t.Borrower.Name = u.Name
+		t.Lender.Name = counterparty.Name
+	} else {
+		t.Borrower.Name = counterparty.Name
+		t.Lender.Name = u.Name
+	}
 
 	err = app.notifiers.Transactions.Send(t)
 	if err != nil {
@@ -134,4 +141,18 @@ func (app *application) showTransactions(w http.ResponseWriter, r *http.Request)
 	if err != nil {
 		app.serverError(w, r, err)
 	}
+}
+
+func isAuthorizedUser(user *data.User, debt *data.Debt) bool {
+	return user.ID == debt.Lender.ID || user.ID == debt.Borrower.ID
+}
+
+func isTransactionAllowed(user *data.User, debt *data.Debt, amount float64) bool {
+	if user.ID == debt.Borrower.ID {
+		return amount > 0
+	}
+	if user.ID == debt.Lender.ID {
+		return amount < 0
+	}
+	return false
 }
