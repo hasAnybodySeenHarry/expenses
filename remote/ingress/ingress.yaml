@@ -70,3 +70,12 @@ spec:
               number: 8080
         path: /
         pathType: Prefix
+  - http:
+      paths:
+      - backend:
+          service:
+            name: development-notifier
+            port:
+              number: 8080
+        path: /notifications
+        pathType: Prefix

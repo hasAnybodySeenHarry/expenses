@@ -18,7 +18,6 @@ spec:
     - name: POSTGRES_DB
       value: "expenses"
 ---
-# postgres-service.yaml
 apiVersion: v1
 kind: Service
 metadata:

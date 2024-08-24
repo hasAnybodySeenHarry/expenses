@@ -1,6 +1,6 @@
 apiVersion: v2
 name: expenses
-description: A Helm chart for deploying the expenses services
+description: A Helm chart for deploying the expenses service
 type: application
 version: 1.0.0
 appVersion: 1.0.0

@@ -4,25 +4,6 @@ service:
   internalPort: 8080
   grpcPort: 50051
 
-db:
-  host: postgres-database
-  username: harry
-  password: password
-  database: expenses
-  port: 5432
-  maxOpenConn: 30
-  maxIdleConn: 30
-
-rabbitmq:
-  username: harry
-  password: password
-  host: rabbitmq-proxy
-  port: 5672
-
-pubsub:
-  host: kafka-node
-  port: 9092
-
 replicaCount: 1
 
 image:
@@ -97,6 +78,8 @@ env:
   value: "50051"
 - name: PORT
   value: "8080"
+- name: ENV
+  value: "development"
 - name: DB_USERNAME
   valueFrom:
     secretKeyRef:
@@ -107,6 +90,16 @@ env:
     secretKeyRef:
       name: db-secrets
       key: password
+- name: DB_HOST
+  valueFrom:
+    secretKeyRef:
+      name: db-secrets
+      key: host
+- name: DB_NAME
+  valueFrom:
+    secretKeyRef:
+      name: db-secrets
+      key: name
 - name: DB_PORT
   valueFrom:
     secretKeyRef:
