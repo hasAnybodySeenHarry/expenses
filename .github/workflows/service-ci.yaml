@@ -118,7 +118,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      
+
     - name: Setup yq tools
       uses: mikefarah/yq@v4.35.2
 
@@ -142,7 +142,7 @@ jobs:
     - name: Clone Helm repository
       uses: actions/checkout@v3
       with:
-        repository: ${{ vars.HELM_REPO_NAME }}/${{ secrets.HELM_REPO_NAME }}
+        repository: ${{ vars.HELM_REPO_OWNER }}/${{ secrets.HELM_REPO_NAME }}
         ref: ${{ secrets.HELM_REPO_TARGET }}
         token: ${{ secrets.HELM_REPO_PAT }}
         path: ./${{ secrets.HELM_REPO_NAME }}
