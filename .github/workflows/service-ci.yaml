@@ -116,34 +116,45 @@ jobs:
     runs-on: ubuntu-latest
     needs: [unit-tests, static-analysis, sonar-analysis, validate-helm]
     steps:
-    - name: Checkout code
+    - name: Setup yq tools
+      uses: mikefarah/yq@v4.35.2
+
+    - name: Update helm files
+      run: |
+        CHART_VERSION="$(cat VERSION_HELM)"
+        APP_VERSION="$(cat VERSION)"
+        yq eval -i ".version = \"${CHART_VERSION}.${{ github.run_number }}\"" "./${{ env.HELM_FOLDER }}/Chart.yaml"
+        yq eval -i ".appVersion = \"${APP_VERSION}\"" "./${{ env.HELM_FOLDER }}/Chart.yaml"
+
+    - name: Setup Helm
+      uses: azure/setup-helm@v3
+      with:
+        version: ${{ env.HELM_VERSION }}
+
+    - name: Package Helm chart
+      run: |
+        helm package ./${{ env.HELM_FOLDER }}
+        helm repo index ./${{ env.HELM_FOLDER }} --url ${{ secrets.HELM_REPO_URL }}
+
+    - name: Clone Helm repository
       uses: actions/checkout@v3
+      with:
+        repository: ${{ vars.HELM_REPO_NAME }}/${{ secrets.HELM_REPO_NAME }}
+        ref: ${{ secrets.HELM_REPO_TARGET }}
+        token: ${{ secrets.HELM_REPO_PAT }}
+        path: ./${{ secrets.HELM_REPO_NAME }}
 
-    - name: Package Chart
+    - name: Replace helm packages
       run: |
-        helm package ${{ env.HELM_FOLDER }} --destination charts
-        helm repo index charts --url ${{ vars.HELM_REPO_URL }}
-
-    - name: Commit and push
+        mkdir -p "./${{ secrets.HELM_REPO_NAME }}/app/expenses"
+        cp *.tgz "./${{ secrets.HELM_REPO_NAME }}/app/expenses"/
+        
+    - name: Push Helm packages
       run: |
+        cd helm-repository
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-
-        if [[ $(git status --porcelain) ]]; then
-          if ! git add .; then
-            echo "Error: Failed to stage files"
-          fi
-
-          if ! git commit -m "Updated from ref: ${{ github.sha }}"; then
-            echo "Error: Failed to commit files"
-          fi
-
-          if ! git push; then
-            if ! git pull --rebase && git push; then
-              echo "Error: failed to push the code."
-              exit 1
-            fi
-          fi
-        else
-          echo "Nothing to commit."
-        fi
+        git pull origin ${{ secrets.HELM_REPO_TARGET }}
+        git add .
+        git commit -m "${{ github.ref_name }}"
+        git push origin ${{ secrets.HELM_REPO_TARGET }}
