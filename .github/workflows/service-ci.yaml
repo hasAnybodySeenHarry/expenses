@@ -116,6 +116,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [unit-tests, static-analysis, sonar-analysis, validate-helm]
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
     - name: Setup yq tools
       uses: mikefarah/yq@v4.35.2
 
