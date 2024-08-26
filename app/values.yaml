@@ -78,8 +78,6 @@ env:
   value: "50051"
 - name: PORT
   value: "8080"
-- name: ENV
-  value: "development"
 - name: DB_USERNAME
   valueFrom:
     secretKeyRef:

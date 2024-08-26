@@ -15,7 +15,7 @@ on:
 env:
   GO_VERSION: '1.22'
   HELM_VERSION: 'v3.13.3'
-  HELM_FOLDER: ./app
+  HELM_FOLDER: app
 
 jobs:
   unit-tests:
@@ -69,7 +69,7 @@ jobs:
 
     - name: Lint Helm Chart
       run: |
-        helm lint ${{ env.HELM_FOLDER }}
+        helm lint ./${{ env.HELM_FOLDER }}
 
   sonar-analysis:
     runs-on: ubuntu-latest
@@ -153,7 +153,7 @@ jobs:
         
     - name: Push Helm packages
       run: |
-        cd helm-repository
+        cd ${{ secrets.HELM_REPO_NAME }}
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
         git pull origin ${{ secrets.HELM_REPO_TARGET }}
