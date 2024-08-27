@@ -217,3 +217,35 @@ chmod +x terra.sh
 ```
 
 This script will handle everything from installing Argo, setting up the application dependencies, and deploying applications and necessary resources for you.
+
+## Contributing
+
+Thank you for your interest in contributing to the Debt Tracker project. At this time, we are not accepting external contributions due to limited resources for code review and project maintenance. We appreciate your understanding.
+
+We hope to reopen contributions in the future as resources allow.
+
+## License
+
+This project is licensed under the [GNU General Public License (GPL) v3.0](https://opensource.org/licenses/GPL-3.0). This means:
+
+- You are free to use, modify, and distribute this software.
+- If you distribute derivative works or software that uses this software, you must also release it under the GPL.
+
+For more details, see the [LICENSE](LICENSE) file.
+
+## Acknowledgements
+
+We would like to thank the following projects and organizations for their contributions and support:
+
+- **Kubernetes**: For providing a robust platform for container orchestration.
+- **Helm**: For simplifying the deployment of applications on Kubernetes.
+- **React**: For the powerful library used to build the frontend.
+- **ArgoCD**: For enabling declarative continuous delivery.
+- **Redis**: For efficient in-memory data storage.
+- **MongoDB**: For flexible document storage.
+- **Kafka**: For distributed event streaming.
+- **PostgreSQL**: Well, just for existing in this world :D
+
+## Contact
+
+For any questions or feedback, please contact us at [harryd.io@proton.me](mailto:harryd.io@proton.me).
