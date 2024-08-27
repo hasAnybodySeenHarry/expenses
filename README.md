@@ -1,5 +1,94 @@
 # Debt Tracker
 
+A simple platform designed to keep track of debts—how much you owe, how much is expected to be received, and the history of debts given and received. This project consists of five applications, four of which are written in Go, and the frontend is built with React.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Applications](#applications)
+  - [Expenses Service](#expenses-service)
+  - [Mailer Service](#mailer-service)
+  - [Throttler Service](#throttler-service)
+  - [Notifier Service](#notifier-service)
+  - [Frontend Application](#frontend-application)
+- [Infrastructure](#infrastructure)
+- [CI/CD Pipeline](#ci-cd-pipeline)
+- [Future Plans](#future-plans)
+- [Getting Started](#getting-started)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Overview
+
+This platform allows users to manage their debts and transactions efficiently. Users can record debts, monitor what is owed, and see a detailed history of transactions. The backend services are containerized and orchestrated using Kubernetes, with Helm Charts facilitating deployment.
+
+## Applications
+
+### Expenses Service
+
+The **Expenses Service** is the core of the platform. It handles:
+
+- **User Management**: Registration, authentication, and user data management using a Postgresql database.
+- **Debt and Transaction Management**: Create, update, and monitor debts and transactions.
+- **Gateway Functionality**: Serves as the entry point for the web frontend via an HTTP server.
+- **gRPC Server**: Used for efficient inter-service communication, particularly for fetching user information.
+- **Messaging Integration**: Assigns OTP mailing jobs to a messaging proxy and publishes debt and transaction events to Kafka topics.
+
+### Mailer Service
+
+The **Mailer Service** is responsible for sending emails, such as OTPs, to users. It:
+
+- **Fetches Mailing Jobs**: Retrieves jobs from an AMQP proxy.
+- **Email Sending**: Uses a cloud service API to send emails over the public internet.
+- **Resilience**: Implements exponential backoff with jitter for retrying failed email sends.
+
+### Throttler Service
+
+The **Throttler Service** provides centralized rate limiting. It:
+
+- **Identity Verification**: Verifies identity via RPC with the Expenses Service.
+- **Rate Limiting**: Uses a leaky bucket algorithm, with different limits for activated and inactivated accounts.
+- **Redis Integration**: Stores rate-limiting tokens, ID mappings, and relies on Redis for persistence.
+- **Circuit Breaker**: Includes a breaker and fallback mechanisms in case of downstream service failures.
+
+### Notifier Service
+
+The **Notifier Service** handles real-time notifications. It:
+
+- **Kafka Consumer**: Consumes events from Kafka topics and stores them in MongoDB.
+- **Identity Verification**: Verifies identity via RPC with the Expenses Service.
+- **WebSocket Streaming**: Streams notifications to active users and ensures missed notifications are delivered upon reconnection.
+
+### Frontend Application
+
+The **Frontend Application** is a React-based web application. It serves as the user interface, allowing users to interact with the platform. This app communicates primarily with the Expenses Service for user and debt management routed via a reverse proxy.
+
+## Infrastructure
+
+The platform's infrastructure is containerized and deployed on Kubernetes. Key components include:
+
+- **Helm Charts**: Used for deploying the applications on a Kubernetes cluster.
+- **KinD (Kubernetes in Docker)**: Utilized for local testing and development.
+- **Docker Compose**: Used for testing individual services and integrations on the local work station.
+- **Message Queues, Databases, and Kafka Nodes**: Containerized within the cluster for easy management. (for development)
+
+## CI/CD Pipeline
+
+- **CI**: Managed using GitHub Actions for tasks like unit testing, linting, validation, packaging, and distribution.
+- **Code Quality**: SonarQube is used for code analysis with sensible defaults.
+- **CD**: Handled by ArgoCD, with plans to introduce App Mesh for Blue/Green deployments in the future.
+
+## Future Plans
+
+- **HashiCorp Vault Integration**: For managing secrets and configurations during runtime.
+- **AWS EKS Migration**: Terraform code is ready for deployment on AWS EKS once the services are stable, to take advantage of managed node provisioners and load balancers.
+- **Private Endpoints**: Planning to use private endpoints for mailing and object storage on AWS.
+
+## Getting Started
+
+To set up the project locally:
+
+
 ## System Architecture
 
 ```mermaid
