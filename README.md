@@ -5,6 +5,7 @@
 ```mermaid
 graph TD
     style ReactApp fill:#1f78b4,stroke:#333,stroke-width:2px,color:#fff
+    style ReverseProxy fill:#1f78b4,stroke:#333,stroke-width:2px,color:#fff
     style Expenses fill:#33a02c,stroke:#333,stroke-width:2px,color:#fff
     style Throttler fill:#ff7f00,stroke:#333,stroke-width:2px,color:#fff
     style Mailer fill:#6a3d9a,stroke:#333,stroke-width:2px,color:#fff
@@ -21,14 +22,15 @@ graph TD
     end
 
     subgraph Backend
-        Expenses[Expenses]
-        Throttler[Throttler]
-        Mailer[Mailer]
-        Notifier[Notifier]
+        ReverseProxy[Reverse Proxy]
+        Expenses[Expenses Service]
+        Throttler[Throttler Service]
+        Mailer[Mailer Service]
+        Notifier[Notifier Service]
     end
 
     subgraph Databases
-        Postgres[Postgres]
+        Postgres[Postgres Database]
         Redis[Redis]
         MongoDB[MongoDB]
     end
@@ -38,10 +40,11 @@ graph TD
         AMQP[AMQP Proxy]
     end
 
-    ReactApp -- HTTP --> Expenses
+    ReactApp -- HTTP/gRPC --> ReverseProxy
+    ReverseProxy -- Check Rate Limit --> Throttler
+    Throttler -- RPC --> ReverseProxy
+    ReverseProxy -- Forward Request --> Expenses
     Expenses -- User Data --> Postgres
-    Expenses -- Rate Limit Check --> Throttler
-    Throttler -- RPC --> Expenses
     Throttler -- Rate Limit Buckets --> Redis
     Expenses -- Mailing Job --> AMQP
     Mailer -- Fetch Job --> AMQP
@@ -49,17 +52,20 @@ graph TD
     Expenses -- Send Event --> Kafka
     Notifier -- Consume Events --> Kafka
     Notifier -- Store Notifications --> MongoDB
-    Notifier -- Send Notifications --> WebSocket
+    ReactApp -- Subscribe --> Notifier
+    Notifier -- WebSocket --> ReactApp
 
     linkStyle 0 stroke:#1f78b4,stroke-width:2px
-    linkStyle 1 stroke:#33a02c,stroke-width:2px
+    linkStyle 1 stroke:#ff7f00,stroke-width:2px
     linkStyle 2 stroke:#ff7f00,stroke-width:2px
-    linkStyle 3 stroke:#ff7f00,stroke-width:2px
-    linkStyle 4 stroke:#ff7f00,stroke-width:2px
-    linkStyle 5 stroke:#6a3d9a,stroke-width:2px
+    linkStyle 3 stroke:#33a02c,stroke-width:2px
+    linkStyle 4 stroke:#33a02c,stroke-width:2px
+    linkStyle 5 stroke:#ff7f00,stroke-width:2px
     linkStyle 6 stroke:#6a3d9a,stroke-width:2px
     linkStyle 7 stroke:#6a3d9a,stroke-width:2px
-    linkStyle 8 stroke:#cab2d6,stroke-width:2px
-    linkStyle 9 stroke:#b15928,stroke-width:2px
+    linkStyle 8 stroke:#6a3d9a,stroke-width:2px
+    linkStyle 9 stroke:#cab2d6,stroke-width:2px
     linkStyle 10 stroke:#b15928,stroke-width:2px
     linkStyle 11 stroke:#b15928,stroke-width:2px
+    linkStyle 12 stroke:#1f78b4,stroke-width:2px
+    linkStyle 13 stroke:#b15928,stroke-width:2px
