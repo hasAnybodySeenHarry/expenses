@@ -47,7 +47,7 @@ graph TD
     end
 
     %% Define connections with labels and directions
-    ReactApp -- HTTP/gRPC --> ReverseProxy
+    ReactApp -- HTTP --> ReverseProxy
     ReverseProxy -- Check Rate Limit --> Throttler
     Throttler -- RPC --> ReverseProxy
     ReverseProxy -- Forward Request --> Expenses
