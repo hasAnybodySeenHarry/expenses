@@ -163,6 +163,57 @@ The platform's infrastructure is containerized and deployed on Kubernetes. Key c
 - **AWS EKS Migration**: Terraform code is ready for deployment on AWS EKS once the services are stable, to take advantage of managed node provisioners and load balancers.
 - **Private Endpoints**: Planning to use private endpoints for mailing and object storage on AWS.
 
+
 ## Getting Started
 
-To set up the project locally:
+To set up the project locally, follow these steps:
+
+### 1. Clone the Repository
+
+First, clone the repository using Git:
+
+```bash
+git clone https://github.com/hasAnybodySeenHarry/cluster
+cd cluster
+```
+
+### 2. Install ArgoCD
+
+Before deploying the infrastructure, you need to install ArgoCD. Follow the official ArgoCD installation guide for instructions.
+
+### 3. Install Helm
+
+Ensure Helm is installed on your system. You can find installation instructions on the Helm website.
+
+### 4. Install Helm Templates
+
+Navigate to the application-infrastructure directory and install the Helm templates:
+
+```bash
+cd application-infrastructure
+helm install my-infrastructure .
+```
+
+This will set up the necessary application infrastructure and associated secrets.
+
+### 5. Deploy Kubernetes Manifests
+
+Deploy the Kubernetes manifests located in the .init/ directory:
+
+```bash
+cd ..
+kubectl apply -f .init/
+```
+
+These manifests will monitor and install the charts appropriately.
+
+### Alternative: Automated Setup
+
+For a quicker setup, you can use the `terra.sh` script, which performs all the above steps automatically:
+
+```bash
+chmod +x terra.sh
+./terra.sh
+```
+
+This script will handle everything from installing Argo, setting up the application dependencies, and deploying applications and necessary resources for you.
