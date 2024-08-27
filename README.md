@@ -1,6 +1,6 @@
 # Debt Tracker
 
-A simple platform designed to keep track of debts—how much you owe, how much is expected to be received, and the history of debts given and received. This project consists of five applications, four of which are written in Go, and the frontend is built with React.
+A simple platform designed to keep track of debts; how much you owe, how much is expected to be received, and the history of debts given and received. This project consists of five applications, four of which are written in Go, and the frontend is built with React.
 
 ## System Architecture
 
