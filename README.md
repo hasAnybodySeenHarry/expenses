@@ -45,7 +45,7 @@ graph TD
     end
 
     %% Define connections with labels and directions
-    ReactApp -- HTTP/gRPC --> ReverseProxy
+    ReactApp -- HTTP --> ReverseProxy
     ReverseProxy -- Check Rate Limit --> Throttler
     Throttler -- RPC --> ReverseProxy
     ReverseProxy -- Forward Request to Expenses --> Expenses
@@ -57,7 +57,7 @@ graph TD
     Expenses -- Send Event --> Kafka
     Notifier -- Consume Events --> Kafka
     Notifier -- Store Notifications --> MongoDB
-    ReactApp -- HTTP/gRPC Subscribe --> ReverseProxy
+    ReactApp -- WebSocket --> ReverseProxy
     ReverseProxy -- Check Rate Limit --> Throttler
     Throttler -- RPC --> ReverseProxy
     ReverseProxy -- Forward Request to Notifier --> Notifier
