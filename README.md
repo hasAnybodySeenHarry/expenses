@@ -4,18 +4,18 @@
 
 ```mermaid
 graph TD
-    style ReactApp fill:#1f78b4,stroke:#333,stroke-width:2px,color:#fff
-    style ReverseProxy fill:#1f78b4,stroke:#333,stroke-width:2px,color:#fff
-    style Expenses fill:#33a02c,stroke:#333,stroke-width:2px,color:#fff
-    style Throttler fill:#ff7f00,stroke:#333,stroke-width:2px,color:#fff
-    style Mailer fill:#6a3d9a,stroke:#333,stroke-width:2px,color:#fff
-    style Notifier fill:#b15928,stroke:#333,stroke-width:2px,color:#fff
-    style Postgres fill:#a6cee3,stroke:#333,stroke-width:2px,color:#333
-    style Redis fill:#fb9a99,stroke:#333,stroke-width:2px,color:#333
-    style MongoDB fill:#fdbf6f,stroke:#333,stroke-width:2px,color:#333
-    style Kafka fill:#cab2d6,stroke:#333,stroke-width:2px,color:#333
-    style AMQP fill:#ffff99,stroke:#333,stroke-width:2px,color:#333
-    style CloudEmail fill:#e31a1c,stroke:#333,stroke-width:2px,color:#fff
+    style ReactApp fill:#4fc3f7,stroke:#0288d1,stroke-width:2px,color:#fff
+    style ReverseProxy fill:#4fc3f7,stroke:#0288d1,stroke-width:2px,color:#fff
+    style Expenses fill:#81c784,stroke:#388e3c,stroke-width:2px,color:#fff
+    style Throttler fill:#ffb74d,stroke:#f57c00,stroke-width:2px,color:#fff
+    style Mailer fill:#ba68c8,stroke:#8e24aa,stroke-width:2px,color:#fff
+    style Notifier fill:#8d6e63,stroke:#5d4037,stroke-width:2px,color:#fff
+    style Postgres fill:#a6cee3,stroke:#1e88e5,stroke-width:2px,color:#333
+    style Redis fill:#ef9a9a,stroke:#e53935,stroke-width:2px,color:#333
+    style MongoDB fill:#ffcc80,stroke:#fb8c00,stroke-width:2px,color:#333
+    style Kafka fill:#ce93d8,stroke:#8e24aa,stroke-width:2px,color:#333
+    style AMQP fill:#fff176,stroke:#fbc02d,stroke-width:2px,color:#333
+    style CloudEmail fill:#e57373,stroke:#d32f2f,stroke-width:2px,color:#fff
 
     subgraph Frontend
         ReactApp[React App]
@@ -62,18 +62,18 @@ graph TD
     Notifier -- WebSocket --> ReactApp
 
     %% Style links
-    linkStyle 0 stroke:#1f78b4,stroke-width:2px
-    linkStyle 1 stroke:#33a02c,stroke-width:2px
-    linkStyle 2 stroke:#33a02c,stroke-width:2px
-    linkStyle 3 stroke:#ff7f00,stroke-width:2px
-    linkStyle 4 stroke:#ff7f00,stroke-width:2px
-    linkStyle 5 stroke:#6a3d9a,stroke-width:2px
-    linkStyle 6 stroke:#6a3d9a,stroke-width:2px
-    linkStyle 7 stroke:#6a3d9a,stroke-width:2px
-    linkStyle 8 stroke:#cab2d6,stroke-width:2px
-    linkStyle 9 stroke:#b15928,stroke-width:2px
-    linkStyle 10 stroke:#b15928,stroke-width:2px
-    linkStyle 11 stroke:#1f78b4,stroke-width:2px
-    linkStyle 12 stroke:#b15928,stroke-width:2px
-    linkStyle 13 stroke:#b15928,stroke-width:2px
-    linkStyle 14 stroke:#b15928,stroke-width:2px
+    linkStyle 0 stroke:#0288d1,stroke-width:2px
+    linkStyle 1 stroke:#388e3c,stroke-width:2px
+    linkStyle 2 stroke:#388e3c,stroke-width:2px
+    linkStyle 3 stroke:#f57c00,stroke-width:2px
+    linkStyle 4 stroke:#f57c00,stroke-width:2px
+    linkStyle 5 stroke:#8e24aa,stroke-width:2px
+    linkStyle 6 stroke:#8e24aa,stroke-width:2px
+    linkStyle 7 stroke:#8e24aa,stroke-width:2px
+    linkStyle 8 stroke:#8e24aa,stroke-width:2px
+    linkStyle 9 stroke:#5d4037,stroke-width:2px
+    linkStyle 10 stroke:#5d4037,stroke-width:2px
+    linkStyle 11 stroke:#0288d1,stroke-width:2px
+    linkStyle 12 stroke:#5d4037,stroke-width:2px
+    linkStyle 13 stroke:#5d4037,stroke-width:2px
+    linkStyle 14 stroke:#5d4037,stroke-width:2px
