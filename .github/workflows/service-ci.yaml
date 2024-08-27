@@ -12,6 +12,7 @@ on:
     - 'migrations/**'
     - 'remote/**'
     - 'README.md'
+    - 'LICENSE'
 
 env:
   GO_VERSION: '1.22'
