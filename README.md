@@ -179,11 +179,11 @@ cd cluster
 
 ### 2. Install ArgoCD
 
-Before deploying the infrastructure, you need to install ArgoCD. Follow the official ArgoCD installation guide for instructions.
+Before deploying the infrastructure, you need to install ArgoCD. Follow the official [ArgoCD installation guide](https://argo-cd.readthedocs.io/en/stable/getting_started/) for instructions.
 
 ### 3. Install Helm
 
-Ensure Helm is installed on your system. You can find installation instructions on the Helm website.
+Ensure Helm is installed on your system. You can find installation instructions on the [Helm website](https://helm.sh/docs/intro/install/).
 
 ### 4. Install Helm Templates
 
