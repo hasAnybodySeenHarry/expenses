@@ -245,6 +245,7 @@ We would like to thank the following projects and organizations for their contri
 - **MongoDB**: For flexible document storage.
 - **Kafka**: For distributed event streaming.
 - **PostgreSQL**: Well, just for existing in this world :D
+- **Go**: Most importantly, empowering every one of us to build software with ease.
 
 ## Contact
 
