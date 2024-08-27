@@ -4,18 +4,18 @@
 
 ```mermaid
 graph TD
-    style ReactApp fill:#1f78b4,stroke:#333,stroke-width:2px,color:#fff
-    style ReverseProxy fill:#1f78b4,stroke:#333,stroke-width:2px,color:#fff
-    style Expenses fill:#33a02c,stroke:#333,stroke-width:2px,color:#fff
-    style Throttler fill:#ff7f00,stroke:#333,stroke-width:2px,color:#fff
-    style Mailer fill:#6a3d9a,stroke:#333,stroke-width:2px,color:#fff
-    style Notifier fill:#b15928,stroke:#333,stroke-width:2px,color:#fff
-    style Postgres fill:#a6cee3,stroke:#333,stroke-width:2px,color:#333
-    style Redis fill:#fb9a99,stroke:#333,stroke-width:2px,color:#333
-    style MongoDB fill:#fdbf6f,stroke:#333,stroke-width:2px,color:#333
-    style Kafka fill:#cab2d6,stroke:#333,stroke-width:2px,color:#333
-    style AMQP fill:#ffff99,stroke:#333,stroke-width:2px,color:#333
-    style CloudEmail fill:#e31a1c,stroke:#333,stroke-width:2px,color:#fff
+    style ReactApp fill:#1f78b4,stroke:#1f78b4,stroke-width:2px,color:#fff,rx:10,ry:10
+    style ReverseProxy fill:#1f78b4,stroke:#1f78b4,stroke-width:2px,color:#fff,rx:10,ry:10
+    style Expenses fill:#33a02c,stroke:#33a02c,stroke-width:2px,color:#fff,rx:10,ry:10
+    style Throttler fill:#ff7f00,stroke:#ff7f00,stroke-width:2px,color:#fff,rx:10,ry:10
+    style Mailer fill:#6a3d9a,stroke:#6a3d9a,stroke-width:2px,color:#fff,rx:10,ry:10
+    style Notifier fill:#b15928,stroke:#b15928,stroke-width:2px,color:#fff,rx:10,ry:10
+    style Postgres fill:#a6cee3,stroke:#333,stroke-width:2px,color:#333,rx:10,ry:10
+    style Redis fill:#fb9a99,stroke:#333,stroke-width:2px,color:#333,rx:10,ry:10
+    style MongoDB fill:#fdbf6f,stroke:#333,stroke-width:2px,color:#333,rx:10,ry:10
+    style Kafka fill:#cab2d6,stroke:#333,stroke-width:2px,color:#333,rx:10,ry:10
+    style AMQP fill:#ffff99,stroke:#333,stroke-width:2px,color:#333,rx:10,ry:10
+    style CloudEmail fill:#e31a1c,stroke:#333,stroke-width:2px,color:#fff,rx:10,ry:10
 
     subgraph Frontend
         ReactApp[React App]
