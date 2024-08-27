@@ -4,18 +4,18 @@
 
 ```mermaid
 graph TD
-    style ReactApp fill:#2196F3,stroke:#1976D2,stroke-width:2px,color:#fff,font-size:14px
-    style ReverseProxy fill:#2196F3,stroke:#1976D2,stroke-width:2px,color:#fff,font-size:14px
-    style Expenses fill:#66BB6A,stroke:#388E3C,stroke-width:2px,color:#fff,font-size:14px
-    style Throttler fill:#FFB74D,stroke:#F57C00,stroke-width:2px,color:#fff,font-size:14px
-    style Mailer fill:#AB47BC,stroke:#8E24AA,stroke-width:2px,color:#fff,font-size:14px
-    style Notifier fill:#A1887F,stroke:#6D4C41,stroke-width:2px,color:#fff,font-size:14px
-    style Postgres fill:#B3E5FC,stroke:#039BE5,stroke-width:2px,color:#333,font-size:14px
-    style Redis fill:#FFCDD2,stroke:#E57373,stroke-width:2px,color:#333,font-size:14px
-    style MongoDB fill:#FFE082,stroke:#FFC107,stroke-width:2px,color:#333,font-size:14px
-    style Kafka fill:#CE93D8,stroke:#AB47BC,stroke-width:2px,color:#333,font-size:14px
-    style AMQP fill:#FFF59D,stroke:#FBC02D,stroke-width:2px,color:#333,font-size:14px
-    style CloudEmail fill:#EF9A9A,stroke:#E57373,stroke-width:2px,color:#fff,font-size:14px
+    style ReactApp fill:#2196F3,stroke:#1976D2,stroke-width:2px,color:#fff,font-size:14px,rx:10,ry:10
+    style ReverseProxy fill:#2196F3,stroke:#1976D2,stroke-width:2px,color:#fff,font-size:14px,rx:10,ry:10
+    style Expenses fill:#66BB6A,stroke:#388E3C,stroke-width:2px,color:#fff,font-size:14px,rx:10,ry:10
+    style Throttler fill:#FFB74D,stroke:#F57C00,stroke-width:2px,color:#fff,font-size:14px,rx:10,ry:10
+    style Mailer fill:#AB47BC,stroke:#8E24AA,stroke-width:2px,color:#fff,font-size:14px,rx:10,ry:10
+    style Notifier fill:#A1887F,stroke:#6D4C41,stroke-width:2px,color:#fff,font-size:14px,rx:10,ry:10
+    style Postgres fill:#B3E5FC,stroke:#039BE5,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
+    style Redis fill:#FFCDD2,stroke:#E57373,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
+    style MongoDB fill:#FFE082,stroke:#FFC107,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
+    style Kafka fill:#CE93D8,stroke:#AB47BC,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
+    style AMQP fill:#FFF59D,stroke:#FBC02D,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
+    style CloudEmail fill:#EF9A9A,stroke:#E57373,stroke-width:2px,color:#fff,font-size:14px,rx:10,ry:10
 
     subgraph Frontend
         ReactApp[React App]
