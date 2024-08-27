@@ -11,6 +11,7 @@ on:
     path-ignore:
     - 'migrations/**'
     - 'remote/**'
+    - '**/README.md'
 
 env:
   GO_VERSION: '1.22'
