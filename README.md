@@ -4,6 +4,7 @@
 
 ```mermaid
 graph TD
+    %% Define consistent styles for nodes
     style ReactApp fill:#1f78b4,stroke:#333,stroke-width:2px,color:#fff
     style ReverseProxy fill:#1f78b4,stroke:#333,stroke-width:2px,color:#fff
     style Expenses fill:#33a02c,stroke:#333,stroke-width:2px,color:#fff
@@ -17,14 +18,15 @@ graph TD
     style AMQP fill:#ffff99,stroke:#333,stroke-width:2px,color:#333
     style CloudEmail fill:#e31a1c,stroke:#333,stroke-width:2px,color:#fff
 
+    %% Define the layout and interactions
     subgraph Frontend
         ReactApp[React App]
     end
 
     subgraph Backend
         ReverseProxy[Reverse Proxy]
-        Expenses[Expenses Service]
         Throttler[Throttler Service]
+        Expenses[Expenses Service]
         Mailer[Mailer Service]
         Notifier[Notifier Service]
     end
@@ -40,6 +42,11 @@ graph TD
         AMQP[AMQP Proxy]
     end
 
+    subgraph ExternalServices
+        CloudEmail[Cloud Email Service]
+    end
+
+    %% Define connections with labels and directions
     ReactApp -- HTTP/gRPC --> ReverseProxy
     ReverseProxy -- Check Rate Limit --> Throttler
     Throttler -- RPC --> ReverseProxy
@@ -52,9 +59,10 @@ graph TD
     Expenses -- Send Event --> Kafka
     Notifier -- Consume Events --> Kafka
     Notifier -- Store Notifications --> MongoDB
-    ReactApp -- Subscribe --> Notifier
-    Notifier -- WebSocket --> ReactApp
+    ReactApp -- Subscribe to Notifications --> Notifier
+    Notifier -- WebSocket Notifications --> ReactApp
 
+    %% Style links
     linkStyle 0 stroke:#1f78b4,stroke-width:2px
     linkStyle 1 stroke:#ff7f00,stroke-width:2px
     linkStyle 2 stroke:#ff7f00,stroke-width:2px
