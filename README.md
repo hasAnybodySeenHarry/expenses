@@ -4,7 +4,6 @@
 
 ```mermaid
 graph TD
-    %% Define consistent styles for nodes
     style ReactApp fill:#1f78b4,stroke:#333,stroke-width:2px,color:#fff
     style ReverseProxy fill:#1f78b4,stroke:#333,stroke-width:2px,color:#fff
     style Expenses fill:#33a02c,stroke:#333,stroke-width:2px,color:#fff
@@ -18,15 +17,14 @@ graph TD
     style AMQP fill:#ffff99,stroke:#333,stroke-width:2px,color:#333
     style CloudEmail fill:#e31a1c,stroke:#333,stroke-width:2px,color:#fff
 
-    %% Define the layout and interactions
     subgraph Frontend
         ReactApp[React App]
     end
 
     subgraph Backend
         ReverseProxy[Reverse Proxy]
-        Throttler[Throttler Service]
         Expenses[Expenses Service]
+        Throttler[Throttler Service]
         Mailer[Mailer Service]
         Notifier[Notifier Service]
     end
@@ -47,10 +45,10 @@ graph TD
     end
 
     %% Define connections with labels and directions
-    ReactApp -- HTTP --> ReverseProxy
+    ReactApp -- HTTP/gRPC --> ReverseProxy
     ReverseProxy -- Check Rate Limit --> Throttler
     Throttler -- RPC --> ReverseProxy
-    ReverseProxy -- Forward Request --> Expenses
+    ReverseProxy -- Forward Request to Expenses --> Expenses
     Expenses -- User Data --> Postgres
     Throttler -- Rate Limit Buckets --> Redis
     Expenses -- Mailing Job --> AMQP
@@ -59,8 +57,12 @@ graph TD
     Expenses -- Send Event --> Kafka
     Notifier -- Consume Events --> Kafka
     Notifier -- Store Notifications --> MongoDB
-    ReactApp -- Subscribe to Notifications --> Notifier
-    Notifier -- WebSocket Notifications --> ReactApp
+    ReactApp -- HTTP/gRPC Subscribe --> ReverseProxy
+    ReverseProxy -- Check Rate Limit --> Throttler
+    Throttler -- RPC --> ReverseProxy
+    ReverseProxy -- Forward Request to Notifier --> Notifier
+    Notifier -- Check User Identity --> Expenses
+    Notifier -- WebSocket --> ReactApp
 
     %% Style links
     linkStyle 0 stroke:#1f78b4,stroke-width:2px
@@ -76,4 +78,8 @@ graph TD
     linkStyle 10 stroke:#b15928,stroke-width:2px
     linkStyle 11 stroke:#b15928,stroke-width:2px
     linkStyle 12 stroke:#1f78b4,stroke-width:2px
-    linkStyle 13 stroke:#b15928,stroke-width:2px
+    linkStyle 13 stroke:#ff7f00,stroke-width:2px
+    linkStyle 14 stroke:#ff7f00,stroke-width:2px
+    linkStyle 15 stroke:#b15928,stroke-width:2px
+    linkStyle 16 stroke:#b15928,stroke-width:2px
+    linkStyle 17 stroke:#b15928,stroke-width:2px
