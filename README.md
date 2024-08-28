@@ -69,14 +69,14 @@ graph TD
     linkStyle 2 stroke:#388E3C,stroke-width:2px
     linkStyle 3 stroke:#F57C00,stroke-width:2px
     linkStyle 4 stroke:#F57C00,stroke-width:2px
-    linkStyle 5 stroke:#8E24AA,stroke-width:2px
+    linkStyle 5 stroke:#388E3C,stroke-width:2px
     linkStyle 6 stroke:#8E24AA,stroke-width:2px
     linkStyle 7 stroke:#8E24AA,stroke-width:2px
-    linkStyle 8 stroke:#8E24AA,stroke-width:2px
+    linkStyle 8 stroke:#388E3C,stroke-width:2px
     linkStyle 9 stroke:#6D4C41,stroke-width:2px
     linkStyle 10 stroke:#6D4C41,stroke-width:2px
     linkStyle 11 stroke:#1976D2,stroke-width:2px
-    linkStyle 12 stroke:#6D4C41,stroke-width:2px
+    linkStyle 12 stroke:#1976D2,stroke-width:2px
     linkStyle 13 stroke:#6D4C41,stroke-width:2px
     linkStyle 14 stroke:#6D4C41,stroke-width:2px
 ```
