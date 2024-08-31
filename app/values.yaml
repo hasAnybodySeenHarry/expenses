@@ -4,7 +4,7 @@ service:
   internalPort: 8080
   grpcPort: 50051
 
-replicaCount: 2
+replicaCount: 1
 
 image:
   registry: docker.io
