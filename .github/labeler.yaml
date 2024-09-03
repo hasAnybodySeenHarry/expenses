@@ -1,0 +1,13 @@
+bug:
+- 'bug'
+- 'fix'
+- 'error'
+
+enhancement:
+- 'enhancement'
+- 'feature'
+- 'improve'
+
+documentation:
+- 'docs'
+- 'documentation'
