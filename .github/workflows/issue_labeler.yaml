@@ -7,7 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Label new issues
-      uses: actions/labeler@v2
+      uses: github/issue-labeler@v3.3
       with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
         configuration-path: .github/labeler.yaml
+        enable-versioned-regex: 0
+        repo-token: ${{ github.token }}
