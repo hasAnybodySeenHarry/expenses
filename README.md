@@ -54,10 +54,10 @@ graph TD
     Expenses -- User Data --> Postgres
     Throttler -- gRPC --> Expenses
     Throttler -- Rate Limit Buckets --> Redis
-    Mailer -- Fetch Job --> AMQP
+    Mailer -- Fetch Jobs --> AMQP
     Expenses -- AMQP --> AMQP
-    Mailer -- Send Email --> CloudEmail
-    Expenses -- Send Event --> Kafka
+    Mailer -- Send Emails --> CloudEmail
+    Expenses -- Send Events --> Kafka
     Notifier -- Consume Events --> Kafka
     Notifier -- Store Notifications --> MongoDB
     Notifier -- Pub/Sub --> RedisPubSub
