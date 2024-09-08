@@ -16,8 +16,8 @@ graph TD
     style Redis fill:#FFCDD2,stroke:#E57373,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
     style MongoDB fill:#FFE082,stroke:#FFC107,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
     style AMQP fill:#FFF59D,stroke:#FBC02D,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
-    style RedisPubSub fill:#FFCDD2,stroke:#E57373,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
     style Kafka fill:#CE93D8,stroke:#AB47BC,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
+    style RedisPubSub fill:#FFCDD2,stroke:#E57373,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
     style CloudEmail fill:#EF9A9A,stroke:#E57373,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
 
     subgraph Frontend
