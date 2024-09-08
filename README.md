@@ -62,9 +62,10 @@ graph TD
     Notifier -- Store Notifications --> MongoDB
     Notifier -- Pub/Sub --> RedisPubSub
     ReactApp -- WebSocket --> ReverseProxy
-    ReverseProxy -- HTTP --> Notifier
+    ReverseProxy -- WebSocket --> Notifier
     Notifier -- gRPC --> Expenses
     Notifier -- WebSocket --> ReactApp
+    ReverseProxy -- HTTP --> Throttler
 
     %% Style links
     linkStyle 0 stroke:#1976D2,stroke-width:2px
@@ -83,6 +84,7 @@ graph TD
     linkStyle 13 stroke:#1976D2,stroke-width:2px
     linkStyle 14 stroke:#6D4C41,stroke-width:2px
     linkStyle 15 stroke:#6D4C41,stroke-width:2px
+    linkStyle 16 stroke:#1976D2,stroke-width:2px
 ```
 
 ## Table of Contents
