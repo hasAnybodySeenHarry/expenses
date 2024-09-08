@@ -21,7 +21,7 @@ graph TD
     style CloudEmail fill:#EF9A9A,stroke:#E57373,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
 
     subgraph Frontend
-        ReactApp[React App]
+        ReactApp[React Client]
     end
 
     subgraph Backend
@@ -39,9 +39,9 @@ graph TD
     end
 
     subgraph Messaging
+        AMQP[AMQP Proxy]
         Kafka[Kafka]
         RedisPubSub[Redis Pub/Sub]
-        AMQP[AMQP Proxy]
     end
 
     subgraph ExternalServices
