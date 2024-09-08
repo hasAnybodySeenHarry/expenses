@@ -15,8 +15,8 @@ graph TD
     style Postgres fill:#B3E5FC,stroke:#039BE5,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
     style Redis fill:#FFCDD2,stroke:#E57373,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
     style MongoDB fill:#FFE082,stroke:#FFC107,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
-    style RedisPubSub fill:#FFCDD2,stroke:#E57373,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
     style AMQP fill:#FFF59D,stroke:#FBC02D,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
+    style RedisPubSub fill:#FFCDD2,stroke:#E57373,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
     style Kafka fill:#CE93D8,stroke:#AB47BC,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
     style CloudEmail fill:#EF9A9A,stroke:#E57373,stroke-width:2px,color:#333,font-size:14px,rx:10,ry:10
 
@@ -60,6 +60,7 @@ graph TD
     Expenses -- Send Event --> Kafka
     Notifier -- Consume Events --> Kafka
     Notifier -- Store Notifications --> MongoDB
+    Notifier -- Pub/Sub --> RedisPubSub
     ReactApp -- WebSocket --> ReverseProxy
     ReverseProxy -- HTTP --> Notifier
     Notifier -- gRPC --> Expenses
@@ -77,10 +78,11 @@ graph TD
     linkStyle 8 stroke:#388E3C,stroke-width:2px
     linkStyle 9 stroke:#6D4C41,stroke-width:2px
     linkStyle 10 stroke:#6D4C41,stroke-width:2px
-    linkStyle 11 stroke:#1976D2,stroke-width:2px
+    linkStyle 11 stroke:#6D4C41,stroke-width:2px
     linkStyle 12 stroke:#1976D2,stroke-width:2px
-    linkStyle 13 stroke:#6D4C41,stroke-width:2px
+    linkStyle 13 stroke:#1976D2,stroke-width:2px
     linkStyle 14 stroke:#6D4C41,stroke-width:2px
+    linkStyle 15 stroke:#6D4C41,stroke-width:2px
 ```
 
 ## Table of Contents
