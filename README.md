@@ -64,7 +64,9 @@ graph TD
     ReactApp -- WebSocket --> ReverseProxy
     ReverseProxy -- WebSocket --> Notifier
     Notifier -- gRPC --> Expenses
+    Notifier -- WebSocket --> ReactApp
     ReverseProxy -- HTTP --> Throttler
+    Expenses -- HTTP --> ReactApp
 
     %% Style links
     linkStyle 0 stroke:#1976D2,stroke-width:2px
@@ -82,7 +84,9 @@ graph TD
     linkStyle 12 stroke:#1976D2,stroke-width:2px
     linkStyle 13 stroke:#1976D2,stroke-width:2px
     linkStyle 14 stroke:#6D4C41,stroke-width:2px
-    linkStyle 15 stroke:#1976D2,stroke-width:2px
+    linkStyle 15 stroke:#6D4C41,stroke-width:2px
+    linkStyle 16 stroke:#1976D2,stroke-width:2px
+    linkStyle 17 stroke:#388E3C,stroke-width:2px
 ```
 
 ## Table of Contents
