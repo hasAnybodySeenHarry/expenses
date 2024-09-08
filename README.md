@@ -54,8 +54,8 @@ graph TD
     Expenses -- User Data --> Postgres
     Throttler -- gRPC --> Expenses
     Throttler -- Rate Limit Buckets --> Redis
-    Expenses -- AMQP --> AMQP
     Mailer -- Fetch Job --> AMQP
+    Expenses -- AMQP --> AMQP
     Mailer -- Send Email --> CloudEmail
     Expenses -- Send Event --> Kafka
     Notifier -- Consume Events --> Kafka
@@ -71,8 +71,8 @@ graph TD
     linkStyle 2 stroke:#388E3C,stroke-width:2px
     linkStyle 3 stroke:#F57C00,stroke-width:2px
     linkStyle 4 stroke:#F57C00,stroke-width:2px
-    linkStyle 5 stroke:#388E3C,stroke-width:2px
-    linkStyle 6 stroke:#8E24AA,stroke-width:2px
+    linkStyle 5 stroke:#8E24AA,stroke-width:2px
+    linkStyle 6 stroke:#388E3C,stroke-width:2px
     linkStyle 7 stroke:#8E24AA,stroke-width:2px
     linkStyle 8 stroke:#388E3C,stroke-width:2px
     linkStyle 9 stroke:#6D4C41,stroke-width:2px
