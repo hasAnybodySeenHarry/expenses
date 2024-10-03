@@ -46,10 +46,10 @@ securityContext:
 
 resources:
   requests:
-    cpu: 100Mi
+    cpu: 100m
     memory: 256Mi
   limits:
-    cpu: 100Mi
+    cpu: 100m
     memory: 256Mi
 
 nodeSelector: {}
