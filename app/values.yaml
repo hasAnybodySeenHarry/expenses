@@ -20,7 +20,7 @@ autoscaling:
   enabled: true
   minReplicas: 1
   maxReplicas: 5
-  averageTotalHTTPRequests: 10
+  targetCPUUtilizationPercentage: 90
 
 serviceAccountName: default
 
@@ -44,7 +44,13 @@ securityContext:
   runAsNonRoot: true
   runAsUser: 1001
 
-resources: {}
+resources:
+  requests:
+    cpu: 100Mi
+    memory: 256Mi
+  limits:
+    cpu: 100Mi
+    memory: 256Mi
 
 nodeSelector: {}
 

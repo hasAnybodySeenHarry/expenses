@@ -29,13 +29,4 @@ spec:
         type: Utilization
         averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
   {{- end }}
-  {{- if .Values.autoscaling.averageTotalHTTPRequests }}
-  - type: Pods
-    pods:
-      metric:
-        name: total_http_requests
-      target:
-        type: AverageValue
-        averageValue: {{ .Values.autoscaling.averageTotalHTTPRequests }}
-  {{- end}}
 {{- end }}
