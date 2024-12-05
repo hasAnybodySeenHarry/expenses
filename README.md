@@ -1,6 +1,6 @@
-# Debt Tracker
+# FlexTrack
 
-A simple platform designed to keep track of debts; how much you owe, how much is expected to be received, and the history of debts given and received. This project consists of five applications, four of which are written in Go, and the frontend is built with React.
+A simple platform designed to keep track of how much you owe, how much is expected to be received, and the history of money given and received. This project consists of five applications, four of which are written in Go, and the frontend is built with React.
 
 ## System Architecture
 
@@ -145,6 +145,7 @@ The **Notifier Service** handles real-time notifications. It:
 - **Kafka Consumer**: Consumes events from Kafka topics and stores them in MongoDB.
 - **Identity Verification**: Verifies identity via RPC with the Expenses Service.
 - **WebSocket Streaming**: Streams notifications to active users and ensures missed notifications are delivered upon reconnection.
+- **Redis Pub/Sub**: Broadcasts notification informations to peers to ensure all connected users across the service fleet receive.
 
 ### Frontend Application
 
@@ -158,6 +159,7 @@ The platform's infrastructure is containerized and deployed on Kubernetes. Key c
 - **KinD (Kubernetes in Docker)**: Utilized for local testing and development.
 - **Docker Compose**: Used for testing individual services and integrations on the local work station.
 - **Message Queues, Databases, and Kafka Nodes**: Containerized within the cluster for easy management. (for development)
+- **Terraform**: Used a privately designed production-ready EKS Terraform module to deploy the platform.
 
 ## CI/CD Pipeline
 
@@ -168,63 +170,7 @@ The platform's infrastructure is containerized and deployed on Kubernetes. Key c
 ## Future Plans
 
 - **HashiCorp Vault Integration**: For managing secrets and configurations during runtime.
-- **AWS EKS Migration**: Terraform code is ready for deployment on AWS EKS once the services are stable, to take advantage of managed node provisioners and load balancers.
 - **Private Endpoints**: Planning to use private endpoints for mailing and object storage on AWS.
-
-
-## Getting Started
-
-To set up the project locally, follow these steps:
-
-### 1. Clone the Repository
-
-First, clone the repository using Git:
-
-```bash
-git clone https://github.com/hasAnybodySeenHarry/cluster
-cd cluster
-```
-
-### 2. Install ArgoCD
-
-Before deploying the infrastructure, you need to install ArgoCD. Follow the official [ArgoCD installation guide](https://argo-cd.readthedocs.io/en/stable/getting_started/) for instructions.
-
-### 3. Install Helm
-
-Ensure Helm is installed on your system. You can find installation instructions on the [Helm website](https://helm.sh/docs/intro/install/).
-
-### 4. Install Helm Templates
-
-Navigate to the application-infrastructure directory and install the Helm templates:
-
-```bash
-cd application-infrastructure
-helm install my-infrastructure .
-```
-
-This will set up the necessary application infrastructure and associated secrets.
-
-### 5. Deploy Kubernetes Manifests
-
-Deploy the Kubernetes manifests located in the .init/ directory:
-
-```bash
-cd ..
-kubectl apply -f .init/
-```
-
-These manifests will monitor and install the charts appropriately.
-
-### Alternative: Automated Setup
-
-For a quicker setup, you can use the `terra.sh` script, which performs all the above steps automatically:
-
-```bash
-chmod +x terra.sh
-./terra.sh
-```
-
-This script will handle everything from installing Argo, setting up the application dependencies, and deploying applications and necessary resources for you.
 
 ## Contributing
 
@@ -252,8 +198,11 @@ We would like to thank the following projects and organizations for their contri
 - **Redis**: For efficient in-memory data storage.
 - **MongoDB**: For flexible document storage.
 - **Kafka**: For distributed event streaming.
-- **PostgreSQL**: Well, just for existing in this world :D
+- **PostgreSQL**: For the data persistence with performance and reliability.
+- **Terraform**: For the ability to code the whole infrastructure.
+- **Linkerd**: For being a lightweight, lightning-fast, yet a simple mesh solution.
 - **Go**: Most importantly, empowering every one of us to build software with ease.
+
 
 ## Contact
 
