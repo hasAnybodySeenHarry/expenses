@@ -1,162 +1,31 @@
-name: Service-CI
+name: Service CI pipeline
 on:
   push:
     branches:
-    - 'main'
-    - 'develop'
-    - 'feature/**'
-    - 'feat/**'
-    - 'release/**'
-    - 'releases/**'
-    path-ignore:
-    - 'migrations/**'
-    - 'remote/**'
-
-env:
-  GO_VERSION: '1.22'
-  HELM_VERSION: 'v3.13.3'
-  HELM_FOLDER: app
+      - "main"
+      - "develop"
+      - "feature/**"
+      - "feat/**"
+      - "release/**"
+      - "releases/**"
+    paths-ignore:
+      - "migrations/**"
+      - "remote/**"
+      - "**.md"
 
 jobs:
-  unit-tests:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Setup Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: ${{ env.GO_VERSION }}
-
-    - name: Vet source code
-      run: |
-        go vet ./...
-    
-    - name: Run unit tests
-      run: |
-        go test ./...
-  
-  static-analysis:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Setup Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: ${{ env.GO_VERSION }}
-
-    - name: Install linter
-      run: |
-        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s latest
-
-    - name: Run linter
-      run: |
-        ./bin/golangci-lint run
-
-  validate-helm:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Setup Helm
-      uses: azure/setup-helm@v3
-      with:
-        version: ${{ env.HELM_VERSION }}
-
-    - name: Lint Helm Chart
-      run: |
-        helm lint ./${{ env.HELM_FOLDER }}
-
-  sonar-analysis:
-    runs-on: ubuntu-latest
-    needs: [unit-tests, static-analysis]
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-
-    - name: SonarQube Scan
-      uses: sonarsource/sonarqube-scan-action@v2.3.0
-      with:
-        projectBaseDir: .
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
-  containerize:
-    runs-on: ubuntu-latest
-    needs: [unit-tests, static-analysis, sonar-analysis, validate-helm]
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Login to DockerHub
-      uses: docker/login-action@v3
-      with:
-        registry: docker.io
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Build the image
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: |
-          docker.io/${{ secrets.DOCKERHUB_USERNAME }}/expenses:latest
-
-  package-helm:
-    runs-on: ubuntu-latest
-    needs: [unit-tests, static-analysis, sonar-analysis, validate-helm]
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Setup yq tools
-      uses: mikefarah/yq@v4.35.2
-
-    - name: Update helm files
-      run: |
-        CHART_VERSION="$(cat VERSION_HELM)"
-        APP_VERSION="$(cat VERSION)"
-        yq eval -i ".version = \"${CHART_VERSION}.${{ github.run_number }}\"" "./${{ env.HELM_FOLDER }}/Chart.yaml"
-        yq eval -i ".appVersion = \"${APP_VERSION}\"" "./${{ env.HELM_FOLDER }}/Chart.yaml"
-
-    - name: Setup Helm
-      uses: azure/setup-helm@v3
-      with:
-        version: ${{ env.HELM_VERSION }}
-
-    - name: Package Helm chart
-      run: |
-        helm package ./${{ env.HELM_FOLDER }}
-        helm repo index ./${{ env.HELM_FOLDER }} --url ${{ secrets.HELM_REPO_URL }}
-
-    - name: Clone Helm repository
-      uses: actions/checkout@v3
-      with:
-        repository: ${{ vars.HELM_REPO_OWNER }}/${{ secrets.HELM_REPO_NAME }}
-        ref: ${{ secrets.HELM_REPO_TARGET }}
-        token: ${{ secrets.HELM_REPO_PAT }}
-        path: ./${{ secrets.HELM_REPO_NAME }}
-
-    - name: Replace helm packages
-      run: |
-        mkdir -p "./${{ secrets.HELM_REPO_NAME }}/app/expenses"
-        cp *.tgz "./${{ secrets.HELM_REPO_NAME }}/app/expenses"/
-        
-    - name: Push Helm packages
-      run: |
-        cd ${{ secrets.HELM_REPO_NAME }}
-        git config user.name "${GITHUB_ACTOR}"
-        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-        git pull origin ${{ secrets.HELM_REPO_TARGET }}
-        git add .
-        git commit -m "${{ github.ref_name }}"
-        git push origin ${{ secrets.HELM_REPO_TARGET }}
+  service-ci:
+    uses: hasAnybodySeenHarry/workflows/.github/workflows/service-ci.yaml@main
+    with:
+      go_version: "1.22"
+      helm_version: "v3.13.3"
+      helm_folder: "app"
+    secrets:
+      docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      docker_password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      helm_repo_url: ${{ secrets.HELM_REPO_URL }}
+      helm_repo_name: ${{ secrets.HELM_REPO_NAME }}
+      helm_repo_owner: ${{ vars.HELM_REPO_OWNER }}
+      helm_repo_pat: ${{ secrets.HELM_REPO_PAT }}
+      helm_repo_target: ${{ secrets.HELM_REPO_TARGET }}
+      sonar_token: ${{ secrets.SONAR_TOKEN }}
