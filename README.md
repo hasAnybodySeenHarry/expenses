@@ -174,7 +174,7 @@ The platform's infrastructure is containerized and deployed on Kubernetes. Key c
 
 ## Contributing
 
-Thank you for your interest in contributing to the Debt Tracker project. At this time, we are not accepting external contributions due to limited resources for code review and project maintenance. We appreciate your understanding.
+Thank you for your interest in contributing to the FlexTrack project. At this time, we are not accepting external contributions due to limited resources for code review and project maintenance. We appreciate your understanding.
 
 We hope to reopen contributions in the future as resources allow.
 
