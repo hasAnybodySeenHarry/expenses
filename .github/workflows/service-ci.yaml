@@ -12,7 +12,6 @@ on:
       - "migrations/**"
       - "remote/**"
       - "**.md"
-
 jobs:
   service-ci:
     uses: hasAnybodySeenHarry/workflows/.github/workflows/service-ci.yaml@main
