@@ -2,16 +2,16 @@ name: Service CI pipeline
 on:
   push:
     branches:
-      - "main"
-      - "develop"
-      - "feature/**"
-      - "feat/**"
-      - "release/**"
-      - "releases/**"
+    - "main"
+    - "develop"
+    - "feature/**"
+    - "feat/**"
+    - "release/**"
+    - "releases/**"
     paths-ignore:
-      - "migrations/**"
-      - "remote/**"
-      - "**.md"
+    - "migrations/**"
+    - "remote/**"
+    - "**.md"
 jobs:
   service-ci:
     uses: hasAnybodySeenHarry/workflows/.github/workflows/service-ci.yaml@main
