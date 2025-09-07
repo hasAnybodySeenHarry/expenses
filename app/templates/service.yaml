@@ -1,9 +1,11 @@
+{{- $original := . }}
+{{- range $suffix := list "active" "preview" }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "app.fullname" . }}
+  name: {{ include "app.fullname" $original }}-{{ $suffix }}
   labels:
-    {{- include "app.labels" . | nindent 4 }}
+    {{- include "app.labels" $original | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -16,4 +18,6 @@ spec:
     targetPort: grpc
     protocol: TCP
   selector:
-    {{- include "app.selectorLabels" . | nindent 4 }}
+    {{- include "app.selectorLabels" $original | nindent 4 }}
+---
+{{- end }}
