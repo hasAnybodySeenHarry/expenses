@@ -7,14 +7,14 @@ metadata:
   labels:
     {{- include "app.labels" $original | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ $original.Values.service.type }}
   ports:
   - name: http
-    port: {{ .Values.service.port }}
-    targetPort: {{ .Values.service.internalPort | default "http" }}
+    port: {{ $original.Values.service.port }}
+    targetPort: {{ $original.Values.service.internalPort | default "http" }}
     protocol: TCP
   - name: grpc
-    port: {{ .Values.service.grpcPort }}
+    port: {{ $original.Values.service.grpcPort }}
     targetPort: grpc
     protocol: TCP
   selector:
