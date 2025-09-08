@@ -25,7 +25,8 @@ autoscaling:
 serviceAccountName: default
 
 deploymentAnnotations: {}
-podAnnotations: {}
+podAnnotations:
+  linkerd.io/inject: "enabled"
 
 podSecurityContext: {}
 
